@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Syllabus · MDCATEMY</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind theme extension (mirrors tailwind.config.ts) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "warrior-black":  "#181A18",
+            "dark-charcoal":  "#222422",
+            "warrior-gray":   "#2A2C2A",
+            "warrior-border": "#2E302E",
+            "warrior-text":   "#A8ACA8",
+            "mdcat-yellow":      "#FFC600",
+            "mdcat-yellow-dark": "#E6B200",
+          },
+          fontFamily: {
+            poppins: ["Poppins", "sans-serif"],
+            inter:   ["Inter",   "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #181A18;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    * { box-sizing: border-box; }
+    /* Scrollbar (modal body) */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2E302E; border-radius: 3px; }
+    ::selection { background: rgba(255,198,0,0.3); color: #fff; }
+  </style>
+</head>
+
+<!-- Dim backdrop fills the viewport; popup centers over it -->
+<body class="min-h-screen flex items-center justify-center bg-black/75 backdrop-blur-sm">
+
+  <!-- ════════════════════════════════════════════════════════════
+       SYLLABUS POPUP
+  ════════════════════════════════════════════════════════════ -->
+  <div class="w-[calc(100%-24px)] max-w-[420px] max-h-[85vh] bg-dark-charcoal border border-warrior-border rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+
+    <!-- ── Header ── -->
+    <div class="flex items-start justify-between px-5 pt-4 pb-3 border-b border-warrior-border flex-shrink-0">
+      <div class="min-w-0">
+        <p class="text-[9px] font-inter font-black uppercase tracking-[0.14em] text-mdcat-yellow mb-0.5">
+          Test Syllabus · Full PMDC
+        </p>
+        <h3 class="font-poppins font-black text-white text-[16px] truncate">
+          Sunday Full PMDC Mock
+        </h3>
+        <p class="text-warrior-text text-[10px] font-inter mt-0.5">
+          200 MCQs · 150 min
+        </p>
+      </div>
+      <button class="w-8 h-8 rounded-lg flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/30 transition-colors flex-shrink-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ── Body ── -->
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+
+      <p class="text-[9px] font-inter font-black uppercase tracking-[0.14em] text-warrior-text">
+        Syllabus Coverage
+      </p>
+
+      <!-- ─────────────────────────────────────────────
+           BIOLOGY (#10B981)
+      ───────────────────────────────────────────── -->
+      <div class="bg-warrior-black/60 border border-warrior-border rounded-xl overflow-hidden"
+           style="border-left-width: 3px; border-left-color: #10B981;">
+        <button class="w-full flex items-center justify-between px-3 py-2.5 text-left">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                 style="background-color: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.25);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 7v14"/>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+              </svg>
+            </div>
+            <p class="font-poppins font-black text-white text-[13px]">Biology</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text rotate-180">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="px-3 pb-3 space-y-2">
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Cell Biology</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Organelles</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Cell Division</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Genetics</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Mendelian Laws</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">DNA Replication</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Human Physiology</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Digestion</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Circulation</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Excretion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           CHEMISTRY (#F59E0B)
+      ───────────────────────────────────────────── -->
+      <div class="bg-warrior-black/60 border border-warrior-border rounded-xl overflow-hidden"
+           style="border-left-width: 3px; border-left-color: #F59E0B;">
+        <button class="w-full flex items-center justify-between px-3 py-2.5 text-left">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                 style="background-color: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.25);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 7v14"/>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+              </svg>
+            </div>
+            <p class="font-poppins font-black text-white text-[13px]">Chemistry</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text rotate-180">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="px-3 pb-3 space-y-2">
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Atomic Structure</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Electron Configuration</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Periodic Trends</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Chemical Bonding</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Ionic</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Covalent</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Hybridization</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Thermodynamics</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Enthalpy</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Entropy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           PHYSICS (#38BDF8)
+      ───────────────────────────────────────────── -->
+      <div class="bg-warrior-black/60 border border-warrior-border rounded-xl overflow-hidden"
+           style="border-left-width: 3px; border-left-color: #38BDF8;">
+        <button class="w-full flex items-center justify-between px-3 py-2.5 text-left">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                 style="background-color: rgba(56,189,248,0.10); border: 1px solid rgba(56,189,248,0.25);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 7v14"/>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+              </svg>
+            </div>
+            <p class="font-poppins font-black text-white text-[13px]">Physics</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text rotate-180">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="px-3 pb-3 space-y-2">
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Kinematics</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Motion in 1D</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Projectile Motion</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Dynamics</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Newton's Laws</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Friction</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Electrostatics</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Coulomb's Law</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Electric Fields</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           ENGLISH (#A78BFA)
+      ───────────────────────────────────────────── -->
+      <div class="bg-warrior-black/60 border border-warrior-border rounded-xl overflow-hidden"
+           style="border-left-width: 3px; border-left-color: #A78BFA;">
+        <button class="w-full flex items-center justify-between px-3 py-2.5 text-left">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                 style="background-color: rgba(167,139,250,0.10); border: 1px solid rgba(167,139,250,0.25);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 7v14"/>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+              </svg>
+            </div>
+            <p class="font-poppins font-black text-white text-[13px]">English</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text rotate-180">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="px-3 pb-3 space-y-2">
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Reading Comprehension</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Main Idea</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Inference</span>
+            </div>
+          </div>
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Grammar</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Tenses</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Parallelism</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           LOGICAL REASONING (#F472B6)
+      ───────────────────────────────────────────── -->
+      <div class="bg-warrior-black/60 border border-warrior-border rounded-xl overflow-hidden"
+           style="border-left-width: 3px; border-left-color: #F472B6;">
+        <button class="w-full flex items-center justify-between px-3 py-2.5 text-left">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                 style="background-color: rgba(244,114,182,0.10); border: 1px solid rgba(244,114,182,0.25);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F472B6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 7v14"/>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+              </svg>
+            </div>
+            <p class="font-poppins font-black text-white text-[13px]">Logical Reasoning</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text rotate-180">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="px-3 pb-3 space-y-2">
+          <div class="border-l border-warrior-border pl-3 ml-2">
+            <p class="font-inter font-bold text-white text-[11.5px] mb-1">Analytical Reasoning</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Syllogisms</span>
+              <span class="text-[9.5px] font-inter font-bold px-2 py-0.5 rounded-full bg-warrior-gray/25 border border-warrior-border text-warrior-text">Assumptions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Footer ── -->
+    <div class="px-5 py-3 border-t border-warrior-border flex-shrink-0">
+      <button class="w-full py-2.5 bg-warrior-gray/30 border border-warrior-border rounded-xl text-white text-[12px] font-inter font-bold hover:border-mdcat-yellow/40 transition-colors">
+        Close
+      </button>
+    </div>
+
+  </div>
+
+</body>
+</html>

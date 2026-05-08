@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Taking Screen &middot; MDCATEMY</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --warrior-black: #181A18;
+      --dark-charcoal: #222422;
+      --warrior-gray: #2A2C2A;
+      --warrior-border: #2E302E;
+      --warrior-text: #A8ACA8;
+      --mdcat-yellow: #FFC600;
+      --bio: #10B981;
+      --physics: #A78BFA;
+      --chemistry: #38BDF8;
+      --english: #2DD4BF;
+      --logical: #FB923C;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: var(--warrior-black);
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .font-poppins { font-family: "Poppins", sans-serif; }
+    .bg-warrior-black { background: var(--warrior-black); }
+    .bg-dark-charcoal { background: var(--dark-charcoal); }
+    .bg-warrior-gray { background: var(--warrior-gray); }
+    .text-warrior-text { color: var(--warrior-text); }
+    .text-mdcat-yellow { color: var(--mdcat-yellow); }
+    .bg-mdcat-yellow { background: var(--mdcat-yellow); }
+    .border-warrior-border { border-color: var(--warrior-border); }
+
+    .app-shell { height: 100vh; height: 100dvh; display: flex; background: var(--warrior-black); }
+    .desktop-sidebar { width: 284px; background: var(--warrior-black); border-right: 1px solid var(--warrior-border); }
+    .main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+    .topbar { height: 72px; background: var(--dark-charcoal); border-bottom: 1px solid var(--warrior-border); }
+    .quiz-subbar { height: 76px; background: var(--dark-charcoal); border-bottom: 1px solid var(--warrior-border); }
+    .quiz-body { min-height: 0; flex: 1; display: flex; overflow: hidden; }
+    .question-pane { flex: 1; min-width: 0; overflow-y: auto; background: var(--warrior-black); }
+    .question-inner { max-width: 748px; margin: 0 auto; padding: 26px 24px 56px; }
+    .desktop-navigator { width: 240px; background: var(--dark-charcoal); border-left: 1px solid var(--warrior-border); display: flex; flex-direction: column; }
+    .bottom-bar { background: var(--dark-charcoal); border-top: 1px solid var(--warrior-border); }
+
+    .nav-link {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 18px;
+      border-radius: 9px;
+      color: var(--warrior-text);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .nav-link.active {
+      position: relative;
+      color: var(--mdcat-yellow);
+      background: rgba(255, 198, 0, 0.12);
+    }
+    .nav-link.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 4px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--mdcat-yellow);
+    }
+
+    .option-card {
+      min-height: 74px;
+      border: 1px solid var(--warrior-border);
+      background: var(--dark-charcoal);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 20px;
+    }
+    .option-key {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--warrior-gray);
+      color: var(--warrior-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .action-chip {
+      width: 108px;
+      height: 58px;
+      border-radius: 14px;
+      border: 1px solid var(--warrior-border);
+      background: rgba(42, 44, 42, 0.25);
+      color: var(--warrior-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .action-chip.submit {
+      color: var(--mdcat-yellow);
+      background: rgba(255, 198, 0, 0.11);
+      border-color: rgba(255, 198, 0, 0.46);
+    }
+
+    .nav-scroll { flex: 1; overflow-y: auto; padding: 16px 14px; }
+    .nav-scroll::-webkit-scrollbar, .question-pane::-webkit-scrollbar { width: 6px; }
+    .nav-scroll::-webkit-scrollbar-track, .question-pane::-webkit-scrollbar-track { background: var(--warrior-black); }
+    .nav-scroll::-webkit-scrollbar-thumb, .question-pane::-webkit-scrollbar-thumb { background: var(--mdcat-yellow); border-radius: 999px; }
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .q-chip {
+      position: relative;
+      height: 38px;
+      border-radius: 7px;
+      border: 1px solid var(--warrior-border);
+      background: var(--warrior-black);
+      color: var(--warrior-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .q-chip.answered { background: var(--mdcat-yellow); border-color: var(--mdcat-yellow); color: var(--warrior-black); }
+    .q-chip.flagged { background: rgba(251, 146, 60, 0.22); border-color: rgba(251, 146, 60, 0.65); color: #FB923C; }
+    .q-chip.skipped { background: var(--warrior-gray); color: var(--warrior-text); }
+    .q-chip.current { border: 2px solid var(--mdcat-yellow); color: var(--mdcat-yellow); box-shadow: 0 0 0 1px rgba(255, 198, 0, 0.25); }
+    .q-chip.flagged::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: -4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #FB923C;
+      border: 1px solid var(--dark-charcoal);
+    }
+    .subject-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--warrior-text);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .subject-label span:first-child { display: flex; align-items: center; gap: 8px; }
+    .subject-dot { width: 7px; height: 7px; border-radius: 999px; }
+
+    @media (max-width: 1023px) {
+      body { background: #3a252b; }
+      .app-shell { max-width: 390px; margin: 0 auto; }
+      .desktop-sidebar, .desktop-navigator { display: none; }
+      .topbar { height: 56px; }
+      .quiz-subbar { height: 56px; padding-left: 16px; padding-right: 16px; }
+      .question-inner { padding: 20px 16px 120px; }
+      .option-card { min-height: 56px; padding: 12px 16px; border-radius: 10px; gap: 14px; background: #111411; }
+      .option-key { width: 28px; height: 28px; font-size: 10px; }
+      .bottom-bar { position: relative; }
+      .action-chip { width: auto; flex: 1; height: 38px; border-radius: 10px; font-size: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="desktop-sidebar hidden lg:flex flex-col flex-shrink-0">
+      <div class="h-18 px-4 flex items-center gap-3 border-b border-warrior-border" style="height:72px;">
+        <div class="bg-mdcat-yellow flex items-center justify-center flex-shrink-0" style="width:34px;height:38px;clip-path:polygon(50% 0%,100% 15%,100% 75%,50% 100%,0% 75%,0% 15%);">
+          <span class="font-poppins font-black text-black" style="font-size:11px;">M</span>
+        </div>
+        <span class="font-poppins font-black text-xl tracking-tight"><span class="text-mdcat-yellow">MDCAT</span>EMY</span>
+      </div>
+
+      <nav class="flex-1 px-2 py-6 space-y-2">
+        <a href="#" class="nav-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          My Camp
+        </a>
+        <a href="#" class="nav-link active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          Quiz Builder
+        </a>
+        <a href="test-series.html" class="nav-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.91a1 1 0 0 0 0-1.83Z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/></svg>
+          Test Series
+        </a>
+        <a href="my-copy.html" class="nav-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+          My Copy
+        </a>
+        <a href="analytics.html" class="nav-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </a>
+      </nav>
+
+      <div class="border-t border-warrior-border px-4 py-4 space-y-4">
+        <div class="flex items-center gap-4 text-warrior-text font-bold">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </div>
+        <div class="flex items-center gap-4 text-warrior-text font-bold">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>
+          Collapse
+        </div>
+      </div>
+      <div class="border-t border-warrior-border px-3 py-4 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-mdcat-yellow text-black flex items-center justify-center font-poppins font-black text-xs">HK</div>
+        <div>
+          <p class="font-bold text-sm leading-tight">Hayan Khan</p>
+          <p class="text-warrior-text uppercase tracking-widest font-bold" style="font-size:10px;">Warrior</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar flex items-center justify-between px-4 lg:px-7 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden text-warrior-text">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          </button>
+          <div>
+            <h1 class="font-poppins font-black text-white text-base lg:text-xl leading-tight">Quiz Builder</h1>
+            <p class="hidden lg:block text-warrior-text text-sm">Sunday, May 3</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8ACA8" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <div class="relative">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#A8ACA8" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="absolute -right-1 top-0 w-2 h-2 rounded-full bg-mdcat-yellow"></span>
+          </div>
+          <div class="w-9 h-9 rounded-full flex items-center justify-center border border-yellow-600 text-mdcat-yellow font-poppins font-black text-xs" style="background:rgba(255,198,0,0.12);">HK</div>
+        </div>
+      </header>
+
+      <section class="quiz-subbar px-4 lg:px-7 flex items-center justify-between flex-shrink-0">
+        <div>
+          <p class="font-bold text-white text-sm lg:text-base leading-tight">Mixed Subjects</p>
+          <p class="text-warrior-text text-xs">100 MCQs</p>
+        </div>
+        <div class="px-3 py-2 rounded-lg border border-warrior-border bg-warrior-black flex items-center gap-2">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A8ACA8" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="font-mono font-black text-white text-sm">01:12:48</span>
+          <span class="text-warrior-text font-black text-xs">II</span>
+        </div>
+        <p class="text-warrior-text font-black text-sm">Q <span class="font-poppins text-white text-lg">31</span> / 100</p>
+      </section>
+
+      <div class="quiz-body">
+        <section class="question-pane">
+          <div class="question-inner">
+            <div class="flex items-center gap-2 mb-7">
+              <span class="px-3 py-1.5 rounded-full border font-black uppercase tracking-widest" style="font-size:10px;color:var(--bio);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.09);">Easy</span>
+              <span class="text-warrior-text uppercase tracking-widest font-black" style="font-size:10px;">Biology &middot; Genetics</span>
+            </div>
+
+            <p class="text-white font-medium leading-relaxed mb-9" style="font-size:21px;">
+              Which nitrogenous base is found in RNA but NOT in DNA?
+            </p>
+
+            <div class="space-y-4">
+              <div class="option-card"><span class="option-key">A</span><span class="font-bold text-lg">Adenine</span></div>
+              <div class="option-card"><span class="option-key">B</span><span class="font-bold text-lg">Guanine</span></div>
+              <div class="option-card"><span class="option-key">C</span><span class="font-bold text-lg">Uracil</span></div>
+              <div class="option-card"><span class="option-key">D</span><span class="font-bold text-lg">Thymine</span></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="desktop-navigator hidden lg:flex">
+          <div class="px-5 py-4 border-b border-warrior-border flex-shrink-0">
+            <p class="font-poppins font-black text-white uppercase tracking-widest" style="font-size:13px;">Questions</p>
+            <p class="text-warrior-text text-sm mt-1"><span class="text-mdcat-yellow">30</span>/100 answered</p>
+          </div>
+
+          <div class="nav-scroll space-y-5">
+            <section>
+              <div class="subject-label"><span><i class="subject-dot" style="background:var(--physics);"></i>Physics</span><span>30 MCQs</span></div>
+              <div class="question-grid">
+                <span class="q-chip answered">1</span><span class="q-chip answered">2</span><span class="q-chip">3</span><span class="q-chip answered">4</span><span class="q-chip flagged">5</span><span class="q-chip">6</span><span class="q-chip answered">7</span><span class="q-chip">8</span><span class="q-chip skipped">9</span><span class="q-chip answered">10</span>
+                <span class="q-chip">11</span><span class="q-chip flagged">12</span><span class="q-chip answered">13</span><span class="q-chip">14</span><span class="q-chip">15</span><span class="q-chip answered">16</span><span class="q-chip">17</span><span class="q-chip flagged">18</span><span class="q-chip answered">19</span><span class="q-chip">20</span>
+                <span class="q-chip">21</span><span class="q-chip answered">22</span><span class="q-chip flagged">23</span><span class="q-chip">24</span><span class="q-chip answered">25</span><span class="q-chip">26</span><span class="q-chip">27</span><span class="q-chip answered">28</span><span class="q-chip skipped">29</span><span class="q-chip">30</span>
+              </div>
+            </section>
+            <section>
+              <div class="subject-label"><span><i class="subject-dot" style="background:var(--bio);"></i>Biology</span><span>10 MCQs</span></div>
+              <div class="question-grid">
+                <span class="q-chip current">31</span><span class="q-chip">32</span><span class="q-chip flagged">33</span><span class="q-chip answered">34</span><span class="q-chip">35</span><span class="q-chip">36</span><span class="q-chip answered">37</span><span class="q-chip flagged">38</span><span class="q-chip skipped">39</span><span class="q-chip">40</span>
+              </div>
+            </section>
+            <section>
+              <div class="subject-label"><span><i class="subject-dot" style="background:var(--chemistry);"></i>Chemistry</span><span>20 MCQs</span></div>
+              <div class="question-grid">
+                <span class="q-chip answered">41</span><span class="q-chip">42</span><span class="q-chip answered">43</span><span class="q-chip flagged">44</span><span class="q-chip">45</span><span class="q-chip skipped">46</span><span class="q-chip answered">47</span><span class="q-chip">48</span><span class="q-chip">49</span><span class="q-chip answered">50</span>
+                <span class="q-chip flagged">51</span><span class="q-chip">52</span><span class="q-chip answered">53</span><span class="q-chip">54</span><span class="q-chip">55</span><span class="q-chip answered">56</span><span class="q-chip flagged">57</span><span class="q-chip">58</span><span class="q-chip answered">59</span><span class="q-chip">60</span>
+              </div>
+            </section>
+            <section>
+              <div class="subject-label"><span><i class="subject-dot" style="background:var(--english);"></i>English</span><span>20 MCQs</span></div>
+              <div class="question-grid">
+                <span class="q-chip answered">61</span><span class="q-chip answered">62</span><span class="q-chip">63</span><span class="q-chip">64</span><span class="q-chip flagged">65</span><span class="q-chip">66</span><span class="q-chip skipped">67</span><span class="q-chip answered">68</span><span class="q-chip">69</span><span class="q-chip answered">70</span>
+                <span class="q-chip">71</span><span class="q-chip flagged">72</span><span class="q-chip answered">73</span><span class="q-chip">74</span><span class="q-chip">75</span><span class="q-chip answered">76</span><span class="q-chip">77</span><span class="q-chip flagged">78</span><span class="q-chip">79</span><span class="q-chip answered">80</span>
+              </div>
+            </section>
+            <section>
+              <div class="subject-label"><span><i class="subject-dot" style="background:var(--logical);"></i>Logical</span><span>20 MCQs</span></div>
+              <div class="question-grid">
+                <span class="q-chip answered">81</span><span class="q-chip">82</span><span class="q-chip flagged">83</span><span class="q-chip answered">84</span><span class="q-chip">85</span><span class="q-chip">86</span><span class="q-chip answered">87</span><span class="q-chip skipped">88</span><span class="q-chip">89</span><span class="q-chip flagged">90</span>
+                <span class="q-chip answered">91</span><span class="q-chip">92</span><span class="q-chip">93</span><span class="q-chip answered">94</span><span class="q-chip flagged">95</span><span class="q-chip">96</span><span class="q-chip answered">97</span><span class="q-chip">98</span><span class="q-chip">99</span><span class="q-chip answered">100</span>
+              </div>
+            </section>
+          </div>
+
+          <div class="px-4 py-4 border-t border-warrior-border grid grid-cols-1 gap-2 flex-shrink-0">
+            <div class="flex items-center gap-3 text-warrior-text text-sm"><span class="w-3 h-3 border border-warrior-border bg-warrior-black rounded-sm"></span>Unanswered</div>
+            <div class="flex items-center gap-3 text-warrior-text text-sm"><span class="w-3 h-3 bg-mdcat-yellow rounded-sm"></span>Answered</div>
+            <div class="flex items-center gap-3 text-warrior-text text-sm"><span class="w-3 h-3 rounded-sm" style="background:rgba(251,146,60,0.42);border:1px solid rgba(251,146,60,0.8);"></span>Flagged</div>
+            <div class="flex items-center gap-3 text-warrior-text text-sm"><span class="w-3 h-3 bg-warrior-gray rounded-sm"></span>Skipped</div>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="bottom-bar flex-shrink-0">
+        <div class="px-3 lg:px-6 py-3 flex items-center justify-center gap-2">
+          <div class="lg:hidden action-chip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            <span class="text-mdcat-yellow">31/100</span>
+          </div>
+          <div class="action-chip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            Flag
+          </div>
+          <div class="action-chip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            Save
+          </div>
+          <div class="action-chip submit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Submit
+          </div>
+        </div>
+        <div class="px-4 lg:px-7 py-3 border-t border-warrior-border flex items-center gap-4">
+          <button class="flex items-center gap-2 px-5 py-3 rounded-xl text-warrior-text font-black uppercase tracking-wide opacity-40">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Prev
+          </button>
+          <div class="flex-1 min-w-0">
+            <div class="h-1.5 rounded-full bg-warrior-black border border-warrior-border overflow-hidden"><div class="h-full bg-mdcat-yellow rounded-full" style="width:31%;"></div></div>
+            <p class="text-center text-warrior-text font-black uppercase tracking-widest mt-2" style="font-size:10px;">30 of 100 answered</p>
+          </div>
+          <button class="flex items-center gap-2 px-6 py-3 rounded-xl bg-mdcat-yellow text-warrior-black font-black uppercase tracking-wide shadow-lg">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

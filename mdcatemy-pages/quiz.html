@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz · MDCATEMY</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "warrior-black":  "#181A18",
+            "dark-charcoal":  "#222422",
+            "warrior-gray":   "#2A2C2A",
+            "warrior-border": "#2E302E",
+            "warrior-text":   "#A8ACA8",
+            "mdcat-yellow":      "#FFC600",
+            "mdcat-yellow-dark": "#E6B200",
+          },
+          fontFamily: {
+            poppins: ["Poppins", "sans-serif"],
+            inter:   ["Inter",   "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #181A18;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow: hidden;
+    }
+    * { box-sizing: border-box; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #181A18; }
+    ::-webkit-scrollbar-thumb { background: #FFC600; border-radius: 3px; }
+    ::selection { background: rgba(255,198,0,0.3); color: #fff; }
+  </style>
+</head>
+<body class="bg-warrior-black">
+
+  <div class="flex h-screen bg-warrior-black overflow-hidden">
+
+    <!-- ════════════════════════════════════════════════════════════
+         DESKTOP SIDEBAR — Quiz Builder is ACTIVE
+    ════════════════════════════════════════════════════════════ -->
+    <aside class="hidden lg:flex flex-col bg-warrior-black border-r border-warrior-border overflow-hidden relative z-20 flex-shrink-0" style="width: 240px;">
+
+      <div class="flex items-center gap-3 h-[60px] px-4 border-b border-warrior-border flex-shrink-0">
+        <div class="bg-mdcat-yellow flex items-center justify-center flex-shrink-0"
+             style="width:28px; height:32px; clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);">
+          <span class="font-poppins font-black text-warrior-black leading-none" style="font-size:10px;">M</span>
+        </div>
+        <span class="font-poppins font-black text-[15px] tracking-tight whitespace-nowrap">
+          <span class="text-mdcat-yellow">MDCAT</span><span class="text-white">EMY</span>
+        </span>
+      </div>
+
+      <nav class="flex-1 py-3 overflow-y-auto overflow-x-hidden">
+        <div class="space-y-0.5 px-2">
+
+          <!-- My Camp -->
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Camp</span>
+          </a>
+
+          <!-- Quiz Builder (ACTIVE) -->
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 bg-mdcat-yellow/10 text-mdcat-yellow transition-all duration-200">
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-mdcat-yellow rounded-full"></div>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Quiz Builder</span>
+          </a>
+
+          <!-- Test Series -->
+          <a href="test-series.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.91a1 1 0 0 0 0-1.83Z"/>
+              <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+              <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Test Series</span>
+          </a>
+
+          <!-- My Copy -->
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="2" y="3" width="20" height="5" rx="1"/>
+              <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+              <path d="M10 12h4"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Copy</span>
+          </a>
+
+          <!-- Analytics -->
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Analytics</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="border-t border-warrior-border py-2 space-y-0.5 px-2">
+        <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="font-inter font-semibold text-[13px]">Settings</span>
+        </a>
+        <button class="w-full flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>
+          </svg>
+          <span class="font-inter font-semibold text-[13px]">Collapse</span>
+        </button>
+      </div>
+
+      <div class="border-t border-warrior-border py-3 flex items-center gap-3 px-3">
+        <div class="rounded-full bg-mdcat-yellow/15 border border-mdcat-yellow/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+          <span class="font-poppins font-black text-mdcat-yellow" style="font-size:11px;">HK</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-inter font-bold text-[12px] text-white leading-tight">Hayan Khan</p>
+          <p class="font-inter text-[10px] text-warrior-text uppercase tracking-[0.1em]">Warrior</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════
+         MAIN AREA
+    ════════════════════════════════════════════════════════════ -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+      <!-- Top bar — Quiz Builder -->
+      <header class="h-[60px] bg-dark-charcoal border-b border-warrior-border flex items-center justify-between px-4 lg:px-6 flex-shrink-0 z-10">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden text-warrior-text hover:text-white transition-colors p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6"  x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <h1 class="font-poppins font-black text-white text-[15px] leading-tight">Quiz Builder</h1>
+        </div>
+
+        <div class="flex items-center gap-1.5 lg:gap-2">
+          <button class="w-9 h-9 flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/50 rounded-lg transition-all">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+          <button class="relative w-9 h-9 flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/50 rounded-lg transition-all">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+            <span class="absolute top-[7px] right-[7px] w-1.5 h-1.5 bg-mdcat-yellow rounded-full"></span>
+          </button>
+          <div class="rounded-full bg-mdcat-yellow/15 border border-mdcat-yellow/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+            <span class="font-poppins font-black text-mdcat-yellow" style="font-size:11px;">HK</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── QUIZ SUBBAR — subject / timer / Q counter ── -->
+      <div class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-warrior-border bg-dark-charcoal flex-shrink-0">
+        <div class="min-w-0">
+          <p class="font-inter font-bold text-white text-[13px] truncate">Mixed Subjects</p>
+          <p class="text-warrior-text text-[10px] font-inter">20 MCQs</p>
+        </div>
+
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-warrior-border bg-warrior-black">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-warrior-text">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="font-mono font-bold text-[13px] text-white">00:02</span>
+          <button class="ml-1 text-warrior-text hover:text-white text-[12px]">⏸</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-warrior-text text-[12px] font-inter font-bold">
+            Q <span class="text-white font-poppins font-black text-[15px]">1</span>
+            <span class="text-warrior-text/60"> / 20</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- ── QUESTION + OPTIONS (scrollable) ── -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="max-w-2xl mx-auto px-4 lg:px-6 py-5 pb-6">
+
+          <!-- Difficulty + subject tag -->
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.14em] px-2.5 py-1 rounded-full border"
+                  style="color:#FFA500; border-color:#FFA50030; background:#FFA50010;">
+              Medium
+            </span>
+            <span class="text-[9px] font-inter font-bold text-warrior-text uppercase tracking-[0.1em]">
+              Biology · Cell Biology
+            </span>
+          </div>
+
+          <!-- Question -->
+          <p class="font-inter text-white text-base lg:text-[17px] leading-relaxed mb-7">
+            During which phase of mitosis do chromosomes align at the metaphase plate?
+          </p>
+
+          <!-- Options -->
+          <div class="space-y-3 mb-6">
+            <button class="w-full flex items-center gap-4 p-4 rounded-xl border border-warrior-border bg-dark-charcoal text-white text-left hover:border-mdcat-yellow/40 transition-all duration-150">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 font-mono font-bold text-[12px] bg-warrior-gray text-warrior-text">A</div>
+              <span class="font-inter text-[14px] leading-relaxed flex-1">Prophase</span>
+            </button>
+
+            <button class="w-full flex items-center gap-4 p-4 rounded-xl border border-warrior-border bg-dark-charcoal text-white text-left hover:border-mdcat-yellow/40 transition-all duration-150">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 font-mono font-bold text-[12px] bg-warrior-gray text-warrior-text">B</div>
+              <span class="font-inter text-[14px] leading-relaxed flex-1">Metaphase</span>
+            </button>
+
+            <button class="w-full flex items-center gap-4 p-4 rounded-xl border border-warrior-border bg-dark-charcoal text-white text-left hover:border-mdcat-yellow/40 transition-all duration-150">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 font-mono font-bold text-[12px] bg-warrior-gray text-warrior-text">C</div>
+              <span class="font-inter text-[14px] leading-relaxed flex-1">Anaphase</span>
+            </button>
+
+            <button class="w-full flex items-center gap-4 p-4 rounded-xl border border-warrior-border bg-dark-charcoal text-white text-left hover:border-mdcat-yellow/40 transition-all duration-150">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 font-mono font-bold text-[12px] bg-warrior-gray text-warrior-text">D</div>
+              <span class="font-inter text-[14px] leading-relaxed flex-1">Telophase</span>
+            </button>
+          </div>
+
+          <!-- (No explanation block during quiz — only on review) -->
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           BOTTOM ACTION BAR — flex-shrink-0, never scrolls.
+           Question area above scrolls; this bar stays pinned.
+      ═════════════════════════════════════════════════════════ -->
+      <div class="flex-shrink-0 border-t border-warrior-border bg-dark-charcoal">
+
+        <!-- Row 1 — Filter / Flag / Save / Submit -->
+        <div class="flex items-center justify-center gap-2 px-3 lg:px-6 pt-2.5 pb-1.5">
+          <button class="flex flex-col items-center justify-center gap-0.5 flex-1 max-w-[90px] py-2 bg-warrior-gray/25 border border-warrior-border rounded-xl text-warrior-text hover:border-mdcat-yellow/40 hover:text-mdcat-yellow transition-all">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.08em]">1/20</span>
+          </button>
+
+          <button class="flex flex-col items-center justify-center gap-0.5 flex-1 max-w-[90px] py-2 bg-warrior-gray/25 border border-warrior-border rounded-xl text-warrior-text hover:border-orange-400/50 hover:text-orange-300 transition-all">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.08em]">Flag</span>
+          </button>
+
+          <button class="flex flex-col items-center justify-center gap-0.5 flex-1 max-w-[90px] py-2 bg-warrior-gray/25 border border-warrior-border rounded-xl text-warrior-text hover:border-mdcat-yellow/40 hover:text-mdcat-yellow transition-all">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+            </svg>
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.08em]">Save</span>
+          </button>
+
+          <button class="flex flex-col items-center justify-center gap-0.5 flex-1 max-w-[90px] py-2 bg-amber-500/15 border border-amber-500/50 text-amber-300 rounded-xl hover:bg-amber-500/25 hover:border-amber-400 transition-all">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.08em]">Submit</span>
+          </button>
+        </div>
+
+        <!-- Row 2 — Prev / Progress / Next -->
+        <div class="flex items-center gap-2 px-3 lg:px-6 py-2.5 border-t border-warrior-border/60">
+          <button class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3 bg-warrior-gray/30 border border-warrior-border rounded-xl text-white text-[13px] font-inter font-black uppercase tracking-[0.06em] hover:border-mdcat-yellow/40 disabled:opacity-25 transition-all" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Prev
+          </button>
+
+          <div class="flex-1 flex flex-col items-center gap-1 min-w-0">
+            <div class="w-full h-1.5 bg-warrior-black rounded-full overflow-hidden border border-warrior-border">
+              <div class="h-full bg-mdcat-yellow rounded-full" style="width: 5%;"></div>
+            </div>
+            <span class="text-[9px] font-inter font-black uppercase tracking-[0.1em] text-warrior-text">
+              0 of 20 answered
+            </span>
+          </div>
+
+          <button class="flex-shrink-0 flex items-center gap-1.5 px-4 py-3 bg-mdcat-yellow text-warrior-black rounded-xl text-[13px] font-inter font-black uppercase tracking-[0.06em] shadow-lg shadow-mdcat-yellow/15 transition-all">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- (No mobile bottom tab bar — quiz is immersive, hides it) -->
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SUBMIT CONFIRMATION OVERLAY
+       Visible state — toggle off by removing this whole block.
+  ════════════════════════════════════════════════════════════ -->
+  <div class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-40" id="submit-backdrop"></div>
+
+  <div class="hidden fixed left-3 right-3 bottom-3 lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:w-[380px] bg-dark-charcoal border border-warrior-border rounded-2xl p-5 z-50 max-h-[90vh] overflow-y-auto shadow-2xl" id="submit-modal">
+    <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mb-4 mx-auto">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </div>
+
+    <h3 class="font-poppins font-black text-white text-lg mb-2 text-center">Submit Quiz?</h3>
+
+    <div class="flex items-start gap-2.5 bg-amber-500/8 border border-amber-500/20 rounded-xl px-4 py-3 mb-5">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400 flex-shrink-0 mt-0.5">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <p class="text-amber-300 font-inter text-[13px] leading-relaxed">
+        <span class="font-bold">20 questions</span> still unanswered. They will be marked as skipped.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 mb-5">
+      <div class="bg-warrior-black border border-warrior-border rounded-lg py-2 text-center">
+        <p class="font-poppins font-black text-lg leading-none text-emerald-400">0</p>
+        <p class="text-warrior-text text-[9px] font-inter mt-0.5">Answered</p>
+      </div>
+      <div class="bg-warrior-black border border-warrior-border rounded-lg py-2 text-center">
+        <p class="font-poppins font-black text-lg leading-none text-amber-400">20</p>
+        <p class="text-warrior-text text-[9px] font-inter mt-0.5">Unanswered</p>
+      </div>
+      <div class="bg-warrior-black border border-warrior-border rounded-lg py-2 text-center">
+        <p class="font-poppins font-black text-lg leading-none text-orange-400">0</p>
+        <p class="text-warrior-text text-[9px] font-inter mt-0.5">Flagged</p>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <button class="flex-1 py-2.5 px-4 bg-warrior-gray/30 border border-warrior-border rounded-xl text-white text-[13px] font-inter font-bold hover:border-warrior-text/50 transition-colors">
+        Keep Going
+      </button>
+      <a href="quiz-results.html" class="flex-1 py-2.5 px-4 bg-amber-500/15 border border-amber-500/40 rounded-xl text-amber-300 text-[13px] font-inter font-bold hover:bg-amber-500/25 flex items-center justify-center gap-2 transition-colors">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        Submit
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

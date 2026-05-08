@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Builder · Topics · MDCATEMY</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "warrior-black":  "#181A18",
+            "dark-charcoal":  "#222422",
+            "warrior-gray":   "#2A2C2A",
+            "warrior-border": "#2E302E",
+            "warrior-text":   "#A8ACA8",
+            "mdcat-yellow":      "#FFC600",
+            "mdcat-yellow-dark": "#E6B200",
+          },
+          fontFamily: {
+            poppins: ["Poppins", "sans-serif"],
+            inter:   ["Inter",   "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #181A18;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    * { box-sizing: border-box; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #181A18; }
+    ::-webkit-scrollbar-thumb { background: #FFC600; border-radius: 3px; }
+    ::selection { background: rgba(255,198,0,0.3); color: #fff; }
+  </style>
+</head>
+<body class="bg-warrior-black">
+
+  <div class="flex h-screen bg-warrior-black overflow-hidden">
+
+    <!-- ════════════════════════════════════════════════════════════
+         DESKTOP SIDEBAR — Quiz Builder is ACTIVE
+    ════════════════════════════════════════════════════════════ -->
+    <aside class="hidden lg:flex flex-col bg-warrior-black border-r border-warrior-border overflow-hidden relative z-20 flex-shrink-0" style="width: 240px;">
+
+      <div class="flex items-center gap-3 h-[60px] px-4 border-b border-warrior-border flex-shrink-0">
+        <div class="bg-mdcat-yellow flex items-center justify-center flex-shrink-0"
+             style="width:28px; height:32px; clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);">
+          <span class="font-poppins font-black text-warrior-black leading-none" style="font-size:10px;">M</span>
+        </div>
+        <span class="font-poppins font-black text-[15px] tracking-tight whitespace-nowrap">
+          <span class="text-mdcat-yellow">MDCAT</span><span class="text-white">EMY</span>
+        </span>
+      </div>
+
+      <nav class="flex-1 py-3 overflow-y-auto overflow-x-hidden">
+        <div class="space-y-0.5 px-2">
+
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Camp</span>
+          </a>
+
+          <!-- Quiz Builder (ACTIVE) -->
+          <a href="quiz-builder-subjects.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 bg-mdcat-yellow/10 text-mdcat-yellow transition-all duration-200">
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-mdcat-yellow rounded-full"></div>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Quiz Builder</span>
+          </a>
+
+          <a href="test-series.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.91a1 1 0 0 0 0-1.83Z"/>
+              <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+              <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Test Series</span>
+          </a>
+
+          <a href="my-copy.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="2" y="3" width="20" height="5" rx="1"/>
+              <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+              <path d="M10 12h4"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Copy</span>
+          </a>
+
+          <a href="analytics.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Analytics</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="border-t border-warrior-border py-2 space-y-0.5 px-2">
+        <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="font-inter font-semibold text-[13px]">Settings</span>
+        </a>
+        <button class="w-full flex items-center rounded-lg gap-3 px-3 py-2.5 text-warrior-text hover:bg-warrior-gray/40 hover:text-white transition-all duration-200">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>
+          </svg>
+          <span class="font-inter font-semibold text-[13px]">Collapse</span>
+        </button>
+      </div>
+
+      <div class="border-t border-warrior-border py-3 flex items-center gap-3 px-3">
+        <div class="rounded-full bg-mdcat-yellow/15 border border-mdcat-yellow/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+          <span class="font-poppins font-black text-mdcat-yellow" style="font-size:11px;">HK</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-inter font-bold text-[12px] text-white leading-tight">Hayan Khan</p>
+          <p class="font-inter text-[10px] text-warrior-text uppercase tracking-[0.1em]">Warrior</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════
+         MAIN AREA
+    ════════════════════════════════════════════════════════════ -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+      <!-- Top bar -->
+      <header class="h-[60px] bg-dark-charcoal border-b border-warrior-border flex items-center justify-between px-4 lg:px-6 flex-shrink-0 z-10">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden text-warrior-text hover:text-white transition-colors p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6"  x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <h1 class="font-poppins font-black text-white text-[15px] leading-tight">Quiz Builder</h1>
+        </div>
+
+        <div class="flex items-center gap-1.5 lg:gap-2">
+          <button class="w-9 h-9 flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/50 rounded-lg transition-all">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+          <button class="relative w-9 h-9 flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/50 rounded-lg transition-all">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+            <span class="absolute top-[7px] right-[7px] w-1.5 h-1.5 bg-mdcat-yellow rounded-full"></span>
+          </button>
+          <div class="rounded-full bg-mdcat-yellow/15 border border-mdcat-yellow/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+            <span class="font-poppins font-black text-mdcat-yellow" style="font-size:11px;">HK</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SCROLLABLE CONTENT
+      ════════════════════════════════════════════════════════════ -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="px-4 lg:px-8 py-6 max-w-6xl mx-auto">
+
+          <!-- Page heading -->
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-9 h-9 bg-mdcat-yellow/10 border border-mdcat-yellow/25 rounded-lg flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-mdcat-yellow">
+                <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="font-poppins font-black text-white text-xl">Quiz Builder</h1>
+              <p class="text-warrior-text font-inter text-[12px]">Pick subjects, chapters and settings — then generate.</p>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════════════════════════════════
+               STEP BUILDER
+          ════════════════════════════════════════════════════════ -->
+          <div class="flex flex-col gap-4 lg:gap-6 max-w-3xl lg:mx-auto">
+
+            <!-- ── Step indicator (Topics = ACTIVE) ── -->
+            <div class="flex items-center gap-1 lg:gap-2">
+
+              <!-- Step 1 — Subjects (DONE) -->
+              <div class="flex items-center gap-1 lg:gap-2 flex-1">
+                <a href="quiz-builder-subjects.html" class="w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[10px] lg:text-[13px] font-poppins font-black flex-shrink-0 border-2 bg-mdcat-yellow/70 text-warrior-black cursor-pointer border-warrior-black">1</a>
+                <span class="text-[9px] lg:text-[12px] font-poppins font-black uppercase tracking-[0.1em] truncate text-white">Subjects</span>
+                <div class="flex-1 h-px lg:h-[2px] min-w-[8px] bg-mdcat-yellow"></div>
+              </div>
+
+              <!-- Step 2 — Chapters (DONE) -->
+              <div class="flex items-center gap-1 lg:gap-2 flex-1">
+                <a href="quiz-builder-chapters.html" class="w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[10px] lg:text-[13px] font-poppins font-black flex-shrink-0 border-2 bg-mdcat-yellow/70 text-warrior-black cursor-pointer border-warrior-black">2</a>
+                <span class="text-[9px] lg:text-[12px] font-poppins font-black uppercase tracking-[0.1em] truncate text-white">Chapters</span>
+                <div class="flex-1 h-px lg:h-[2px] min-w-[8px] bg-mdcat-yellow"></div>
+              </div>
+
+              <!-- Step 3 — Topics (ACTIVE) -->
+              <div class="flex items-center gap-1 lg:gap-2 flex-1">
+                <button class="w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[10px] lg:text-[13px] font-poppins font-black flex-shrink-0 border-2 bg-mdcat-yellow text-warrior-black border-warrior-black shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">3</button>
+                <span class="text-[9px] lg:text-[12px] font-poppins font-black uppercase tracking-[0.1em] truncate text-white">Topics</span>
+                <div class="flex-1 h-px lg:h-[2px] min-w-[8px] bg-warrior-border"></div>
+              </div>
+
+              <!-- Step 4 — Settings -->
+              <div class="flex items-center gap-1 lg:gap-2 flex-1">
+                <button class="w-6 h-6 lg:w-9 lg:h-9 rounded-full flex items-center justify-center text-[10px] lg:text-[13px] font-poppins font-black flex-shrink-0 border-2 bg-warrior-black text-warrior-text border-warrior-border">4</button>
+                <span class="text-[9px] lg:text-[12px] font-poppins font-black uppercase tracking-[0.1em] truncate text-warrior-text">Settings</span>
+              </div>
+            </div>
+
+            <!-- Controls row -->
+            <div class="flex items-center justify-between gap-3">
+              <button class="flex items-center gap-2 w-fit group px-1">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-mdcat-yellow">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span class="text-[12px] font-inter font-semibold text-warrior-text/70 group-hover:text-warrior-text transition-colors">Show accuracy</span>
+                <div class="relative w-9 h-5 rounded-full transition-colors duration-200 flex-shrink-0 bg-mdcat-yellow">
+                  <div class="absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full shadow transition-transform duration-200 translate-x-[18px]"></div>
+                </div>
+              </button>
+
+              <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-warrior-border bg-warrior-black/30 hover:border-mdcat-yellow/60 hover:bg-mdcat-yellow/5 active:scale-95 transition-all group">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-mdcat-yellow">
+                  <path d="M9.94 14.34a1.51 1.51 0 0 1-.94-1.4V12a1.51 1.51 0 0 1 .94-1.4l1.66-.66a1.51 1.51 0 0 0 .8-.8l.66-1.66A1.51 1.51 0 0 1 14.46 7H15a1.51 1.51 0 0 1 1.4.94l.66 1.66a1.51 1.51 0 0 0 .8.8l1.66.66A1.51 1.51 0 0 1 21 12v.94a1.51 1.51 0 0 1-.94 1.4l-1.66.66a1.51 1.51 0 0 0-.8.8l-.66 1.66A1.51 1.51 0 0 1 15.54 19H15a1.51 1.51 0 0 1-1.4-.94l-.66-1.66a1.51 1.51 0 0 0-.8-.8z"/>
+                  <path d="M5 4h0"/><path d="M5 18h0"/><path d="M3 9h0"/>
+                </svg>
+                <span class="text-[11px] font-poppins font-black text-warrior-text group-hover:text-white transition-colors uppercase tracking-[0.06em]">Smart Select</span>
+                <span class="text-[8px] font-poppins font-black bg-mdcat-yellow/20 text-mdcat-yellow px-1.5 py-0.5 rounded-full uppercase tracking-[0.08em]">NEW</span>
+              </button>
+            </div>
+
+            <!-- ════════════════════════════════════════════════════
+                 STEP CONTENT CARD — TOPICS
+            ════════════════════════════════════════════════════ -->
+            <div class="bg-dark-charcoal border-2 border-warrior-border rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(255,198,0,0.1)]">
+
+              <!-- YOUR PREP legend -->
+              <div class="px-4 lg:px-6 py-3 border-b border-warrior-border/60 bg-warrior-black/20">
+                <div class="flex items-center gap-x-3 gap-y-1 flex-wrap">
+                  <span class="text-[9px] font-poppins font-black uppercase tracking-[0.14em] text-warrior-text/50 flex-shrink-0">Your Prep</span>
+                  <span class="flex items-center gap-1 text-[10px] font-inter text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>Strong ≥75%</span>
+                  <span class="flex items-center gap-1 text-[10px] font-inter text-amber-400"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>Improving 50–74%</span>
+                  <span class="flex items-center gap-1 text-[10px] font-inter text-red-400"><span class="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0"></span>Needs work &lt;50%</span>
+                  <span class="flex items-center gap-1 text-[10px] font-inter text-warrior-text/40"><span class="w-1.5 h-1.5 rounded-full bg-warrior-text/25 flex-shrink-0"></span>Untouched</span>
+                </div>
+              </div>
+
+              <!-- Multi-subject tabs -->
+              <div class="flex border-b-2 border-warrior-border overflow-x-auto">
+                <!-- Biology — ACTIVE TAB -->
+                <button class="px-3 lg:px-4 py-2.5 lg:py-3 text-[11px] lg:text-[13px] font-poppins font-black whitespace-nowrap flex-shrink-0 border-b-2 border-mdcat-yellow text-white">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full flex-shrink-0 border border-warrior-black" style="background-color:#10B981;"></div>
+                    Biology
+                  </div>
+                </button>
+
+                <button class="px-3 lg:px-4 py-2.5 lg:py-3 text-[11px] lg:text-[13px] font-poppins font-black whitespace-nowrap flex-shrink-0 border-b-2 border-transparent text-warrior-text hover:text-white">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-2 h-2 lg:w-2.5 lg:h-2.5 rounded-full flex-shrink-0 border border-warrior-black" style="background-color:#A78BFA;"></div>
+                    Physics
+                  </div>
+                </button>
+              </div>
+
+              <!-- Topic groups -->
+              <div class="p-4 lg:p-6">
+
+                <!-- ── Cell Biology group ── -->
+                <div class="mb-5 lg:mb-6">
+                  <div class="flex items-center justify-between mb-2 lg:mb-3">
+                    <p class="text-[12px] lg:text-[14px] font-poppins font-black text-white truncate flex-1 mr-2">Cell Biology</p>
+                    <button class="text-[10px] lg:text-[11px] font-poppins font-black text-mdcat-yellow hover:underline flex-shrink-0">Select all</button>
+                  </div>
+                  <div class="flex flex-wrap gap-2 lg:gap-2.5">
+
+                    <!-- Cell Structure — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Cell Structure
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">88%</span>
+                    </button>
+
+                    <!-- Cell Membrane -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Cell Membrane
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">83%</span>
+                    </button>
+
+                    <!-- Mitosis — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Mitosis
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-amber-400 bg-amber-400/10">71%</span>
+                    </button>
+
+                    <!-- Meiosis -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Meiosis
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-amber-400 bg-amber-400/10">71%</span>
+                    </button>
+
+                    <!-- Cell Cycle -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Cell Cycle
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-amber-400 bg-amber-400/10">67%</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ── Bioenergetics group ── -->
+                <div class="mb-5 lg:mb-6">
+                  <div class="flex items-center justify-between mb-2 lg:mb-3">
+                    <p class="text-[12px] lg:text-[14px] font-poppins font-black text-white truncate flex-1 mr-2">Bioenergetics</p>
+                    <button class="text-[10px] lg:text-[11px] font-poppins font-black text-mdcat-yellow hover:underline flex-shrink-0">Select all</button>
+                  </div>
+                  <div class="flex flex-wrap gap-2 lg:gap-2.5">
+
+                    <!-- Photosynthesis -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Photosynthesis
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-amber-400 bg-amber-400/10">65%</span>
+                    </button>
+
+                    <!-- Cellular Respiration — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Cellular Respiration
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-amber-400 bg-amber-400/10">72%</span>
+                    </button>
+
+                    <!-- Glycolysis -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Glycolysis
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">80%</span>
+                    </button>
+
+                    <!-- Krebs Cycle -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      Krebs Cycle
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">75%</span>
+                    </button>
+
+                    <!-- ATP Synthesis -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all border-warrior-border text-warrior-text hover:border-mdcat-yellow/50 hover:text-white">
+                      ATP Synthesis
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">88%</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ── Coordination & Control group ── -->
+                <div class="mb-1">
+                  <div class="flex items-center justify-between mb-2 lg:mb-3">
+                    <p class="text-[12px] lg:text-[14px] font-poppins font-black text-white truncate flex-1 mr-2">Coordination &amp; Control</p>
+                    <button class="text-[10px] lg:text-[11px] font-poppins font-black text-mdcat-yellow hover:underline flex-shrink-0">Deselect all</button>
+                  </div>
+                  <div class="flex flex-wrap gap-2 lg:gap-2.5">
+
+                    <!-- Neurons — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Neurons
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">85%</span>
+                    </button>
+
+                    <!-- Brain Structure — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Brain Structure
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">78%</span>
+                    </button>
+
+                    <!-- Spinal Cord — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Spinal Cord
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">82%</span>
+                    </button>
+
+                    <!-- Endocrine System — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Endocrine System
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">76%</span>
+                    </button>
+
+                    <!-- Hormones — SELECTED -->
+                    <button class="flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full border-2 text-[11px] lg:text-[13px] font-poppins font-black transition-all bg-mdcat-yellow/15 border-mdcat-yellow text-white shadow-[2px_2px_0px_rgba(255,198,0,0.2)]">
+                      <span class="text-mdcat-yellow">✓</span>
+                      Hormones
+                      <span class="px-1.5 py-0.5 rounded-full text-[9px] font-poppins font-black flex-shrink-0 text-emerald-400 bg-emerald-400/10">79%</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nav buttons -->
+            <div class="flex gap-2 lg:gap-3 w-full">
+              <a href="quiz-builder-chapters.html" class="flex-shrink-0 flex items-center gap-1.5 px-4 lg:px-5 py-3 lg:py-3.5 bg-warrior-black border-2 border-warrior-border rounded-xl text-white text-[13px] lg:text-[14px] font-poppins font-black uppercase tracking-[0.08em] hover:border-mdcat-yellow active:scale-95 transition-all">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                Back
+              </a>
+              <a href="quiz-builder-settings.html" class="flex-1 min-w-0 flex items-center justify-center gap-2 bg-mdcat-yellow text-warrior-black font-poppins font-black px-4 lg:px-5 py-3 lg:py-3.5 rounded-xl text-[13px] lg:text-[14px] uppercase tracking-[0.1em] border-2 border-warrior-black shadow-[3px_3px_0px_rgba(0,0,0,0.55)] hover:shadow-[1px_1px_0px_rgba(0,0,0,0.55)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-95 transition-all">
+                Next
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   THEME TOKENS — CSS variables flip when html gets .light class
+───────────────────────────────────────────────────────────── */
+:root,
+html.dark {
+  /* Dark theme (default) — RGB triplets so Tailwind can apply opacity */
+  --warrior-black-rgb:  24 26 24;     /* #181A18 — page bg */
+  --dark-charcoal-rgb:  34 36 34;     /* #222422 — surface */
+  --warrior-gray-rgb:   42 44 42;     /* #2A2C2A — hover/raised */
+  --warrior-border-rgb: 46 48 46;     /* #2E302E — borders */
+  --warrior-text-rgb:   168 172 168;  /* #A8ACA8 — muted text */
+  --text-base-rgb:      255 255 255;  /* white body text */
+  --shadow-color:       0 0 0;
+  --scrollbar-track:    #181A18;
+
+  /* Legacy aliases (kept for any inline style references) */
+  --warrior-black: #181A18;
+  --dark-charcoal: #222422;
+  --mdcat-yellow:  #FFC600;
+}
+
+html.light {
+  /* Light theme — warm off-white surfaces, ink-dark text */
+  --warrior-black-rgb:  250 250 247;  /* #FAFAF7 — page bg (warm off-white) */
+  --dark-charcoal-rgb:  255 255 255;  /* #FFFFFF — card/surface */
+  --warrior-gray-rgb:   241 240 235;  /* #F1F0EB — hover/raised */
+  --warrior-border-rgb: 229 228 224;  /* #E5E4E0 — borders */
+  --warrior-text-rgb:   107 107 104;  /* #6B6B68 — muted text */
+  --text-base-rgb:      24 26 24;     /* #181A18 — body text */
+  --shadow-color:       30 30 28;
+  --scrollbar-track:    #F1F0EB;
+
+  --warrior-black: #FAFAF7;
+  --dark-charcoal: #FFFFFF;
+  --mdcat-yellow:  #FFC600;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--warrior-black-rgb));
+  color: rgb(var(--text-base-rgb));
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LIGHT MODE OVERRIDES — for utility classes that ship with
+   hard-coded white/black. These flip to ink-dark in light mode
+   without touching component code. The DOM class attribute
+   stores Tailwind class names with a literal "/" (no escape),
+   so [class*="text-white/"] matches text-white/80, etc.
+───────────────────────────────────────────────────────────── */
+html.light .text-white,
+html.light [class*="text-white/"] {
+  color: rgb(var(--text-base-rgb));
+}
+
+html.light .border-white,
+html.light [class*="border-white/"] {
+  border-color: rgb(var(--warrior-border-rgb));
+}
+
+html.light .bg-white {
+  background-color: rgb(var(--dark-charcoal-rgb));
+}
+
+/* Pure black backgrounds (used in modal scrims) become a soft slate */
+html.light [class*="bg-black/"] {
+  background-color: rgb(40 40 40 / 0.45);
+}
+
+/* Custom button utilities — @apply baked in dark-mode values, so
+   re-declare the relevant properties for light mode here. */
+html.light .btn-ghost {
+  border-color: rgb(var(--warrior-border-rgb));
+  color: rgb(var(--text-base-rgb));
+}
+html.light .btn-ghost:hover {
+  border-color: #FFC600;
+  color: #C49600;
+}
+
+/* Immersive mode — activated during quiz/simulation taking screens.
+   Hides the dashboard mobile bottom tab bar and removes its 58px reservation
+   so the in-page action bar sits flush against the viewport bottom. */
+body.quiz-immersive [data-mobile-tabbar] {
+  display: none !important;
+}
+body.quiz-immersive [data-dashboard-main] {
+  padding-bottom: 0 !important;
+}
+
+/* iOS safe-area padding helper for in-page bottom bars */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: #FFC600;
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 198, 0, 0.3);
+  color: #ffffff;
+}
+
+/* Marquee pause on hover */
+.marquee-track:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+/* Yellow glow button */
+.btn-primary {
+  @apply bg-mdcat-yellow text-warrior-black font-inter font-black px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 relative overflow-hidden;
+  box-shadow: 0 0 0 0 rgba(255, 198, 0, 0);
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-25deg);
+}
+.btn-primary:hover {
+  @apply scale-105;
+  box-shadow: 0 0 32px 8px rgba(255, 198, 0, 0.4);
+}
+.btn-primary:hover::after {
+  animation: btn-shimmer 0.55s ease forwards;
+}
+.btn-primary:active {
+  @apply scale-95;
+}
+
+@keyframes btn-shimmer {
+  0%   { left: -120%; }
+  100% { left: 160%; }
+}
+
+.btn-ghost {
+  @apply border border-white/30 text-white font-inter font-bold px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 bg-transparent;
+}
+.btn-ghost:hover {
+  @apply border-mdcat-yellow text-mdcat-yellow;
+}
+.btn-ghost:active {
+  @apply scale-95;
+}
+
+/* Section divider - angular cut */
+.section-cut {
+  clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
+}
+.section-cut-reverse {
+  clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+}
+
+/* Tribal pattern overlay */
+.tribal-overlay {
+  position: relative;
+}
+.tribal-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/tribal-bg.svg');
+  background-size: 300px 300px;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Text gradient */
+.text-gradient-yellow {
+  background: linear-gradient(135deg, #FFC600 0%, #FFD740 50%, #FFC600 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Yellow left border callout */
+.callout-yellow {
+  border-left: 4px solid #FFC600;
+  padding-left: 1.5rem;
+}
+
+/* Card hover elevation */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 198, 0, 0.08);
+}
+
+/* Accordion transition */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+/* Noise texture overlay for depth */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}

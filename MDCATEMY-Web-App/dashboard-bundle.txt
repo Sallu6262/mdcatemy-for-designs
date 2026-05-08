@@ -1,0 +1,1993 @@
+================================================================================
+MDCATEMY — DASHBOARD HOMEPAGE BUNDLE
+================================================================================
+
+Stack: Next.js 16 (App Router) · React · TypeScript · Tailwind CSS ·
+       framer-motion · lucide-react
+
+npm deps required:
+  next react react-dom framer-motion lucide-react
+  tailwindcss postcss autoprefixer typescript
+
+Files in this bundle:
+  1. app/dashboard/page.tsx            — the dashboard page itself
+  2. lib/analytics-data.ts             — mock subject/chapter data
+  3. components/dashboard/CircularRing.tsx — ring progress component
+  4. app/dashboard/layout.tsx          — sidebar + top bar + bottom tab bar
+  5. app/globals.css                   — theme tokens (dark + light) + utilities
+  6. tailwind.config.ts                — custom colors + fonts
+
+Extra (not included, stub if needed):
+  - @/components/theme/ThemeToggle     — imported by layout.tsx; replace
+                                         with any simple button or delete
+                                         the import + <ThemeToggle/> tag.
+
+Fonts used: Poppins + Inter (loaded via Google Fonts in globals.css).
+Custom Tailwind colors: warrior-black, dark-charcoal, warrior-gray,
+warrior-border, warrior-text, mdcat-yellow.
+
+================================================================================
+FILE 1/6 — app/dashboard/page.tsx
+================================================================================
+
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import {
+  Flame, Target, CheckCircle, TrendingUp, TrendingDown,
+  BarChart2, ChevronRight, BookOpen, X,
+  Zap, Layers, Archive, Calendar,
+} from "lucide-react";
+import { SUBJECTS, MDCAT_WEIGHTS } from "@/lib/analytics-data";
+import { CircularRing } from "@/components/dashboard/CircularRing";
+
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+const MDCAT_DATE = new Date("2026-08-08T09:00:00");
+const STUDENT_NAME = "Hayan";
+
+const DAILY_WISDOM = [
+  { text: "So, surely with hardship comes ease.", source: "Surah Ash-Sharh 94:5", type: "quran" },
+  { text: "Allah does not burden a soul beyond that it can bear.", source: "Surah Al-Baqarah 2:286", type: "quran" },
+  { text: "And He found you lost and guided you.", source: "Surah Ad-Duha 93:7", type: "quran" },
+  { text: "Verily, after difficulty comes ease.", source: "Surah Al-Inshirah 94:6", type: "quran" },
+  { text: "The secret of getting ahead is getting started.", source: "Mark Twain", type: "quote" },
+  { text: "It does not matter how slowly you go as long as you do not stop.", source: "Confucius", type: "quote" },
+  { text: "Success is not final. Failure is not fatal. It is the courage to continue that counts.", source: "Winston Churchill", type: "quote" },
+  { text: "The expert in anything was once a beginner.", source: "Helen Hayes", type: "quote" },
+];
+
+const PREDICTED_SCORE = Math.round(
+  SUBJECTS.reduce((sum, s, i) => sum + (s.accuracy / 100) * MDCAT_WEIGHTS[i], 0)
+);
+
+const WEAK_TOPICS = [
+  { subject: "Biology",           chapter: "Cell Biology",     topic: "Meiosis II",     accuracy: 28, color: "#10B981" },
+  { subject: "Chemistry",         chapter: "Electrochemistry", topic: "Galvanic Cells", accuracy: 31, color: "#38BDF8" },
+  { subject: "Logical Reasoning", chapter: "Patterns",         topic: "Number Series",  accuracy: 38, color: "#FB923C" },
+  { subject: "Physics",           chapter: "Optics",           topic: "Doppler Effect", accuracy: 42, color: "#A78BFA" },
+];
+
+const TREND = [
+  { label: "M", acc: 61 }, { label: "T", acc: 55 }, { label: "W", acc: 68 },
+  { label: "T", acc: 72 }, { label: "F", acc: 65 }, { label: "S", acc: 78 },
+  { label: "S", acc: 67 },
+];
+
+const HEATMAP = Array.from({ length: 60 }, (_, i) => {
+  const date = new Date();
+  date.setDate(date.getDate() - (59 - i));
+  const seed = ((i * 2654435761) >>> 0) % 1000;
+  const mcqs = seed < 150 ? 0 : seed < 400 ? Math.floor(seed / 30) + 5 : Math.floor(seed / 15) + 15;
+  return { date, mcqs: Math.min(mcqs, 90) };
+});
+
+const TOTAL_MCQS = SUBJECTS.reduce((s, sub) => s + sub.mcqs, 0);
+const OVERALL_ACCURACY = Math.round(
+  SUBJECTS.reduce((s, sub) => s + sub.accuracy * sub.mcqs, 0) / TOTAL_MCQS
+);
+const STREAK_DAYS = 12;
+const TODAY_MCQS = 23;
+const DAILY_GOAL = 50;
+
+type Module = {
+  icon: React.ElementType;
+  label: string;
+  sub: string;
+  href: string;
+  color: string;
+  featured?: boolean;
+  liveBadge?: string;
+};
+
+const MODULES: Module[] = [
+  { icon: Layers,    label: "Test Series",  sub: "Week 15 live",    href: "/dashboard/test-series", color: "#FFC600", featured: true, liveBadge: "Live" },
+  { icon: Zap,       label: "Quiz Builder", sub: "Custom MCQs",     href: "/dashboard/quiz",        color: "#38BDF8" },
+  { icon: Archive,   label: "My Copy",      sub: "Saved + errors",  href: "/dashboard/my-copy",     color: "#A78BFA" },
+  { icon: BarChart2, label: "Deep Stats",   sub: "Topic drilldown", href: "/dashboard/analytics",   color: "#10B981" },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════════ */
+function heatColor(mcqs: number) {
+  if (mcqs === 0) return "bg-warrior-border";
+  if (mcqs < 10) return "bg-mdcat-yellow/20";
+  if (mcqs < 30) return "bg-mdcat-yellow/45";
+  if (mcqs < 60) return "bg-mdcat-yellow/70";
+  return "bg-mdcat-yellow";
+}
+
+function scoreColor(acc: number) {
+  if (acc >= 70) return "text-emerald-400";
+  if (acc >= 55) return "text-amber-400";
+  return "text-red-400";
+}
+
+function countDown(target: Date) {
+  const diff = target.getTime() - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
+  return {
+    days:    Math.floor(diff / 86400000),
+    hours:   Math.floor((diff % 86400000) / 3600000),
+    minutes: Math.floor((diff % 3600000) / 60000),
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COUNTDOWN RIBBON — compact cartoon pill
+═══════════════════════════════════════════════════════════ */
+function CountdownRibbon({ target }: { target: Date }) {
+  const [t, setT] = useState(countDown(target));
+  useEffect(() => {
+    const id = setInterval(() => setT(countDown(target)), 60000);
+    return () => clearInterval(id);
+  }, [target]);
+
+  const urgent = t.days <= 30;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="relative overflow-hidden bg-warrior-black border-2 border-mdcat-yellow rounded-full pl-2 pr-3.5 py-1.5 flex items-center gap-2.5 shadow-[3px_3px_0px_rgba(255,198,0,0.3)]"
+    >
+      {/* diagonal stripes texture */}
+      <div
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(45deg, #FFC600 0 6px, transparent 6px 14px)",
+        }}
+      />
+
+      <motion.div
+        animate={{ rotate: [0, -8, 8, 0] }}
+        transition={{ duration: 1, repeat: Infinity, repeatDelay: 3.5, ease: "easeInOut" }}
+        className="relative w-7 h-7 bg-mdcat-yellow border-2 border-warrior-black rounded-full flex items-center justify-center flex-shrink-0 shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]"
+      >
+        <Calendar size={13} className="text-warrior-black" strokeWidth={3} />
+      </motion.div>
+
+      <div className="relative flex items-baseline gap-1.5">
+        <span className={`font-poppins font-black text-[20px] leading-none ${urgent ? "text-red-400" : "text-mdcat-yellow"}`}>
+          {t.days}
+        </span>
+        <span className="text-[9px] font-poppins font-black uppercase tracking-[0.14em] text-warrior-text">days</span>
+      </div>
+
+      <div className="relative w-px h-5 bg-mdcat-yellow/30" />
+
+      <span className="relative text-white font-poppins font-black text-[11px] leading-none whitespace-nowrap">
+        {String(t.hours).padStart(2, "0")}h {String(t.minutes).padStart(2, "0")}m
+      </span>
+
+      <div className="relative flex-1 min-w-0 flex justify-end">
+        <span className="text-warrior-text text-[8.5px] font-inter font-black uppercase tracking-[0.14em] leading-none whitespace-nowrap hidden sm:inline">
+          to MDCAT · Aug 8
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════════════════════════ */
+function SectionHeader({ title, action, href }: { title: string; action?: string; href?: string }) {
+  return (
+    <div className="flex items-center justify-between mb-3">
+      <h2 className="font-poppins font-black text-white text-[14px] uppercase tracking-[0.08em]">
+        {title}
+      </h2>
+      {action && href && (
+        <Link href={href} className="text-mdcat-yellow text-xs font-poppins font-black hover:underline flex items-center gap-1">
+          {action} <ChevronRight size={12} />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STAT CARD — vertical, breathable
+═══════════════════════════════════════════════════════════ */
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  sub,
+  accent,
+  onClick,
+  hint,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  sub?: string;
+  accent?: string;
+  onClick?: () => void;
+  hint?: boolean;
+}) {
+  const content = (
+    <>
+      <div className="w-8 h-8 bg-mdcat-yellow border-2 border-warrior-black rounded-lg flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+        <Icon size={15} className="text-warrior-black" strokeWidth={2.8} />
+      </div>
+      <p className={`font-poppins font-black text-[22px] leading-none mt-3 ${accent ?? "text-white"}`}>
+        {value}
+      </p>
+      <p className="text-[10px] font-poppins font-black uppercase tracking-[0.08em] text-warrior-text leading-tight mt-1.5 break-words">
+        {label}
+      </p>
+      {sub && (
+        <p className="text-warrior-text text-[9px] font-inter mt-0.5 leading-tight truncate">
+          {sub}
+        </p>
+      )}
+      {hint && (
+        <motion.div
+          animate={{ x: [0, -1.5, 1.5, -1, 1, 0] }}
+          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2.2, ease: "easeInOut" }}
+          className="absolute bottom-1.5 right-2 flex items-center justify-center"
+        >
+          <ChevronRight size={18} className="text-mdcat-yellow" strokeWidth={3.5} />
+        </motion.div>
+      )}
+    </>
+  );
+
+  const baseCls =
+    "relative bg-dark-charcoal border-2 border-warrior-border rounded-2xl p-3.5 flex flex-col shadow-[3px_3px_0px_rgba(255,198,0,0.12)] transition-all duration-150 text-left w-full";
+
+  if (onClick) {
+    return (
+      <motion.button
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        onClick={onClick}
+        className={`${baseCls} hover:border-mdcat-yellow hover:shadow-[1px_1px_0px_rgba(255,198,0,0.22)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-[0.98] cursor-pointer`}
+      >
+        {content}
+      </motion.button>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className={`${baseCls} hover:shadow-[1px_1px_0px_rgba(255,198,0,0.12)] hover:translate-x-[2px] hover:translate-y-[2px] cursor-default`}
+    >
+      {content}
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODULE CARD — compact training card
+═══════════════════════════════════════════════════════════ */
+function ModuleCard({
+  icon: Icon,
+  label,
+  sub,
+  href,
+  color,
+  featured,
+  liveBadge,
+  index,
+}: Module & { index: number }) {
+  return (
+    <Link href={href} className="block">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.35, delay: index * 0.05 }}
+        whileTap={{ scale: 0.97 }}
+        className={`relative overflow-hidden rounded-2xl p-3.5 cursor-pointer transition-all duration-150 ${
+          featured
+            ? "bg-dark-charcoal border-2 border-mdcat-yellow shadow-[3px_3px_0px_rgba(255,198,0,0.32)]"
+            : "bg-dark-charcoal border-2 border-warrior-border shadow-[3px_3px_0px_rgba(255,198,0,0.12)]"
+        } hover:shadow-[1px_1px_0px_rgba(255,198,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px]`}
+      >
+        {featured && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 100% 80% at 0% 0%, rgba(255,198,0,0.14), transparent 70%)",
+            }}
+          />
+        )}
+
+        <div className="relative flex items-start justify-between mb-3">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{
+              backgroundColor: `${color}25`,
+              border: `1.5px solid ${color}65`,
+              boxShadow: featured ? `0 0 14px ${color}30` : undefined,
+            }}
+          >
+            <Icon size={18} style={{ color }} strokeWidth={2.4} />
+          </div>
+
+          {featured && liveBadge ? (
+            <div className="flex items-center gap-1 px-1.5 py-[3px] rounded-md bg-mdcat-yellow border border-warrior-black">
+              <motion.span
+                animate={{ opacity: [1, 0.35, 1] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                className="w-1 h-1 rounded-full bg-warrior-black"
+              />
+              <span className="text-[7px] font-poppins font-black text-warrior-black uppercase tracking-[0.1em] leading-none">
+                {liveBadge}
+              </span>
+            </div>
+          ) : (
+            <ChevronRight size={14} className="text-warrior-text mt-1" />
+          )}
+        </div>
+
+        <p className="relative font-poppins font-black text-[13px] text-white leading-tight">
+          {label}
+        </p>
+        <p
+          className={`relative font-inter text-[10px] mt-0.5 leading-tight ${
+            featured ? "text-mdcat-yellow font-bold" : "text-warrior-text"
+          }`}
+        >
+          {sub}
+        </p>
+      </motion.div>
+    </Link>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RECENT ACTIVITY WIDGET
+═══════════════════════════════════════════════════════════ */
+function RecentActivityWidget({
+  heatmap,
+  streakDays,
+}: {
+  heatmap: { date: Date; mcqs: number }[];
+  streakDays: number;
+}) {
+  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const sliced = heatmap.slice(-7);
+  const today = new Date();
+
+  const LEGEND = [
+    { label: "0 MCQs", cls: "bg-warrior-border" },
+    { label: "1–9",    cls: "bg-mdcat-yellow/20" },
+    { label: "10–29",  cls: "bg-mdcat-yellow/45" },
+    { label: "30–59",  cls: "bg-mdcat-yellow/70" },
+    { label: "60+",    cls: "bg-mdcat-yellow" },
+  ];
+
+  function isSameDay(a: Date, b: Date) {
+    return a.getDate() === b.getDate() &&
+      a.getMonth() === b.getMonth() &&
+      a.getFullYear() === b.getFullYear();
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[10px] font-inter font-black uppercase tracking-[0.14em] text-warrior-text">Last 7 Days</span>
+        <div className="flex items-center gap-1.5 text-orange-400">
+          <Flame size={13} />
+          <span className="text-[12px] font-inter font-black">{streakDays}d streak</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-7 gap-1.5">
+        {sliced.map((d, i) => {
+          const isToday = isSameDay(d.date, today);
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, delay: i * 0.04 }}
+              className={`rounded-lg py-2 px-0.5 flex flex-col items-center gap-1 border transition-colors ${
+                isToday ? "border-mdcat-yellow/60" : "border-warrior-border"
+              } ${heatColor(d.mcqs)}`}
+            >
+              <span className="text-[8px] font-inter font-black uppercase tracking-tight text-warrior-text">
+                {DAY_NAMES[d.date.getDay()]}
+              </span>
+              <span className="text-[8px] font-inter text-warrior-text">
+                {d.date.getDate()}
+              </span>
+              <span className={`font-poppins font-black text-[13px] leading-none ${d.mcqs > 0 ? "text-white" : "text-warrior-border"}`}>
+                {d.mcqs}
+              </span>
+              <span className="text-[7px] font-inter text-warrior-text">MCQs</span>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-3 mt-4 flex-wrap">
+        <span className="text-[10px] font-inter text-warrior-text">Activity:</span>
+        {LEGEND.map((l) => (
+          <div key={l.label} className="flex items-center gap-1.5">
+            <div className={`w-3.5 h-3.5 rounded-sm border border-warrior-border ${l.cls}`} />
+            <span className="text-[10px] font-inter text-warrior-text">{l.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCORE GAUGE (modal)
+═══════════════════════════════════════════════════════════ */
+function ScoreGauge({ score, max, target }: { score: number; max: number; target: number }) {
+  const W = 280;
+  const H = 170;
+  const cx = W / 2;
+  const cy = 140;
+  const r = 108;
+  const stroke = 18;
+
+  const pct = Math.min(100, Math.max(0, (score / max) * 100));
+  const targetPct = Math.min(100, Math.max(0, (target / max) * 100));
+  const arcLen = Math.PI * r;
+
+  const polar = (p: number) => {
+    const a = Math.PI * (1 - p / 100);
+    return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
+  };
+  const needle = polar(pct);
+  const tgt = polar(targetPct);
+
+  const startX = cx - r;
+  const endX = cx + r;
+  const d = `M ${startX} ${cy} A ${r} ${r} 0 0 1 ${endX} ${cy}`;
+
+  return (
+    <div className="relative w-full flex justify-center">
+      <svg
+        width="100%"
+        height={H}
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="xMidYMid meet"
+        className="overflow-visible max-w-[320px]"
+      >
+        <defs>
+          <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#D9534F" />
+            <stop offset="50%" stopColor="#FFA500" />
+            <stop offset="100%" stopColor="#28A745" />
+          </linearGradient>
+          <filter id="gauge-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="4" />
+          </filter>
+        </defs>
+
+        <path
+          d={d}
+          fill="none"
+          stroke="rgb(var(--warrior-border-rgb))"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+        />
+
+        <motion.path
+          d={d}
+          fill="none"
+          stroke="url(#gauge-grad)"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          style={{ strokeDasharray: arcLen }}
+          initial={{ strokeDashoffset: arcLen }}
+          whileInView={{ strokeDashoffset: arcLen * (1 - pct / 100) }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+        />
+
+        <motion.g
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 1.1 }}
+        >
+          <circle
+            cx={tgt.x}
+            cy={tgt.y}
+            r={6}
+            fill="#FFC600"
+            stroke="rgb(var(--dark-charcoal-rgb))"
+            strokeWidth={3}
+          />
+        </motion.g>
+
+        <motion.g
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 1.3, type: "spring", stiffness: 200 }}
+        >
+          <circle cx={needle.x} cy={needle.y} r={11} fill="#FFC600" opacity={0.25} filter="url(#gauge-glow)" />
+          <circle
+            cx={needle.x}
+            cy={needle.y}
+            r={8}
+            fill="#FFFFFF"
+            stroke="rgb(var(--warrior-black-rgb))"
+            strokeWidth={3}
+          />
+        </motion.g>
+
+        <text x={startX} y={cy + 22} textAnchor="middle" fill="rgb(var(--warrior-text-rgb))" fontSize="11" fontFamily="Inter" fontWeight="600">0</text>
+        <text x={endX} y={cy + 22} textAnchor="middle" fill="rgb(var(--warrior-text-rgb))" fontSize="11" fontFamily="Inter" fontWeight="600">{max}</text>
+      </svg>
+
+      <div className="absolute inset-x-0 top-[44%] -translate-y-1/2 flex flex-col items-center pointer-events-none">
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-poppins font-black text-4xl text-mdcat-yellow leading-none">{score}</span>
+          <span className="font-inter text-warrior-text text-sm">/ {max}</span>
+        </div>
+        <span className={`text-[11px] font-poppins font-black mt-1 ${scoreColor(Math.round((score / max) * 100))}`}>
+          {Math.round((score / max) * 100)}%
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MINI SCORE BADGE — pill trigger
+═══════════════════════════════════════════════════════════ */
+function MiniScoreBadge({ score, max, onClick }: { score: number; max: number; onClick: () => void }) {
+  const pct = Math.min(100, Math.max(0, (score / max) * 100));
+  const cx = 17;
+  const cy = 17;
+  const r = 14;
+  const arcLen = Math.PI * r;
+  const d = `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+
+  const angle = Math.PI * (1 - pct / 100);
+  const needleX = cx + r * Math.cos(angle);
+  const needleY = cy - r * Math.sin(angle);
+
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Open score predictor"
+      className="group inline-flex items-center gap-2 bg-dark-charcoal border-2 border-warrior-border hover:border-mdcat-yellow rounded-xl pl-2 pr-3 py-1.5 shadow-[3px_3px_0px_rgba(255,198,0,0.12)] hover:shadow-[1px_1px_0px_rgba(255,198,0,0.18)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-95 transition-all duration-150 flex-shrink-0"
+    >
+      <svg width={34} height={20} viewBox="0 0 34 20" className="overflow-visible">
+        <defs>
+          <linearGradient id="mini-gauge-grad" x1="0%" x2="100%">
+            <stop offset="0%" stopColor="#D9534F" />
+            <stop offset="50%" stopColor="#FFA500" />
+            <stop offset="100%" stopColor="#28A745" />
+          </linearGradient>
+        </defs>
+        <path d={d} fill="none" stroke="rgb(var(--warrior-border-rgb))" strokeWidth="3" strokeLinecap="round" />
+        <path
+          d={d}
+          fill="none"
+          stroke="url(#mini-gauge-grad)"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={arcLen}
+          strokeDashoffset={arcLen * (1 - pct / 100)}
+        />
+        <line
+          x1={cx}
+          y1={cy}
+          x2={needleX}
+          y2={needleY}
+          stroke="#FFC600"
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+        <circle cx={needleX} cy={needleY} r={2.8} fill="#FFC600" stroke="rgb(var(--warrior-black-rgb))" strokeWidth={1.2} />
+        <circle cx={cx} cy={cy} r={2} fill="#FFC600" stroke="rgb(var(--warrior-black-rgb))" strokeWidth={1} />
+      </svg>
+      <span className="font-poppins font-black text-[14px] text-white group-hover:text-mdcat-yellow transition-colors leading-none">
+        {score}
+      </span>
+    </button>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCORE PREDICTOR MODAL
+═══════════════════════════════════════════════════════════ */
+function ScorePredictorModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", h);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", h);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.94 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative bg-dark-charcoal border-2 border-warrior-border rounded-2xl p-5 pt-6 shadow-[6px_6px_0px_rgba(255,198,0,0.22)] w-full max-w-sm"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute -top-3 -right-3 w-10 h-10 bg-mdcat-yellow border-2 border-warrior-black rounded-full shadow-[3px_3px_0px_rgba(0,0,0,0.55)] hover:shadow-[1px_1px_0px_rgba(0,0,0,0.55)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-90 transition-all duration-150 flex items-center justify-center z-10"
+        >
+          <X size={18} className="text-warrior-black" strokeWidth={3.5} />
+        </button>
+
+        <div className="flex items-start justify-between mb-1 pr-8">
+          <div>
+            <p className="text-[10px] font-poppins font-black uppercase tracking-[0.14em] text-warrior-text">
+              Score Predictor
+            </p>
+            <p className="text-warrior-text text-[11px] font-inter mt-0.5">
+              Accuracy × MDCAT subject weights
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-poppins font-black uppercase tracking-[0.1em] text-warrior-text">Target</p>
+            <p className="font-poppins font-black text-white text-lg leading-none">175</p>
+          </div>
+        </div>
+
+        <ScoreGauge score={PREDICTED_SCORE} max={210} target={175} />
+
+        <div className="flex flex-wrap gap-2 mt-3">
+          {SUBJECTS.map((s, i) => (
+            <div key={s.name} className="flex items-center gap-1.5 bg-warrior-black border-2 border-warrior-border rounded-xl px-2.5 py-1.5">
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
+              <span className="text-[10px] font-poppins font-black text-warrior-text">{s.short}</span>
+              <span className="text-[10px] font-inter text-white font-bold">
+                {Math.round((s.accuracy / 100) * MDCAT_WEIGHTS[i])}
+              </span>
+              <span className="text-[10px] font-inter text-warrior-text">/ {MDCAT_WEIGHTS[i]}</span>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PERFORMANCE POPUP
+═══════════════════════════════════════════════════════════ */
+function PerformancePopup({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", h);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", h);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  const trendMax = Math.max(...TREND.map((t) => t.acc));
+  const delta = TREND[TREND.length - 1].acc - TREND[0].acc;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.94 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative bg-dark-charcoal border-2 border-warrior-border rounded-2xl p-5 pt-6 shadow-[6px_6px_0px_rgba(255,198,0,0.22)] w-full max-w-sm"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute -top-3 -right-3 w-10 h-10 bg-mdcat-yellow border-2 border-warrior-black rounded-full shadow-[3px_3px_0px_rgba(0,0,0,0.55)] hover:shadow-[1px_1px_0px_rgba(0,0,0,0.55)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-90 transition-all duration-150 flex items-center justify-center z-10"
+        >
+          <X size={18} className="text-warrior-black" strokeWidth={3.5} />
+        </button>
+
+        <div className="mb-4 pr-8">
+          <p className="text-[10px] font-poppins font-black uppercase tracking-[0.14em] text-warrior-text">Performance</p>
+          <p className="text-white font-poppins font-black text-[18px] leading-tight mt-0.5">Last 7 Sessions</p>
+        </div>
+
+        <div className="flex items-end gap-2 h-[120px]">
+          {TREND.map((t, i) => (
+            <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+              <span className={`text-[10px] font-inter font-bold ${scoreColor(t.acc)}`}>{t.acc}%</span>
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: `${(t.acc / trendMax) * 85}px` }}
+                transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
+                className="w-full rounded-t-md"
+                style={{
+                  background: t.acc >= 70 ? "#10B981" : t.acc >= 55 ? "#FFA500" : "#D9534F",
+                  opacity: i === TREND.length - 1 ? 1 : 0.65,
+                }}
+              />
+              <span className="text-[10px] font-inter text-warrior-text">{t.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-warrior-border flex items-center gap-4">
+          {delta >= 0 ? (
+            <div className="flex items-center gap-1.5 text-emerald-400">
+              <TrendingUp size={14} />
+              <span className="text-xs font-inter font-bold">+{delta}% this week</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 text-red-400">
+              <TrendingDown size={14} />
+              <span className="text-xs font-inter font-bold">{delta}% this week</span>
+            </div>
+          )}
+          <span className="text-warrior-text text-[11px] font-inter">
+            Avg: {Math.round(TREND.reduce((s, t) => s + t.acc, 0) / TREND.length)}%
+          </span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTIVITY POPUP
+═══════════════════════════════════════════════════════════ */
+function ActivityPopup({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", h);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", h);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.94 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative bg-dark-charcoal border-2 border-warrior-border rounded-2xl p-5 pt-6 shadow-[6px_6px_0px_rgba(255,198,0,0.22)] w-full max-w-sm"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute -top-3 -right-3 w-10 h-10 bg-mdcat-yellow border-2 border-warrior-black rounded-full shadow-[3px_3px_0px_rgba(0,0,0,0.55)] hover:shadow-[1px_1px_0px_rgba(0,0,0,0.55)] hover:translate-x-[2px] hover:translate-y-[2px] active:scale-90 transition-all duration-150 flex items-center justify-center z-10"
+        >
+          <X size={18} className="text-warrior-black" strokeWidth={3.5} />
+        </button>
+
+        <div className="mb-4 pr-8">
+          <p className="text-[10px] font-poppins font-black uppercase tracking-[0.14em] text-warrior-text">Today</p>
+          <p className="text-white font-poppins font-black text-[18px] leading-tight mt-0.5">Recent Activity</p>
+        </div>
+
+        <RecentActivityWidget heatmap={HEATMAP} streakDays={STREAK_DAYS} />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN DASHBOARD PAGE
+═══════════════════════════════════════════════════════════ */
+export default function DashboardHome() {
+  const trendMax = Math.max(...TREND.map((t) => t.acc));
+  const todayPct = Math.round((TODAY_MCQS / DAILY_GOAL) * 100);
+  const [scoreOpen, setScoreOpen] = useState(false);
+  const [performanceOpen, setPerformanceOpen] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
+
+  const wisdom = useMemo(() => {
+    const dayOfYear = Math.floor(
+      (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+    );
+    return DAILY_WISDOM[dayOfYear % DAILY_WISDOM.length];
+  }, []);
+
+  return (
+    <div className="px-4 lg:px-8 py-5 space-y-5 max-w-5xl mx-auto">
+
+      {/* ── WELCOME + SCORE BADGE ───────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-start justify-between gap-3"
+      >
+        <div className="flex-1 min-w-0">
+          <p className="text-warrior-text text-[11px] font-poppins font-black uppercase tracking-[0.18em] mb-1">
+            Good morning
+          </p>
+          <h1 className="font-poppins font-black text-white leading-tight" style={{ fontSize: "clamp(1.5rem, 3.2vw, 2rem)" }}>
+            Welcome back,{" "}
+            <span className="text-gradient-yellow">Warrior {STUDENT_NAME}.</span>
+          </h1>
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <span className="inline-flex items-center gap-1 bg-mdcat-yellow text-warrior-black border-2 border-warrior-black rounded-full px-2.5 py-0.5 font-poppins font-black text-[11px] shadow-[2px_2px_0px_rgba(0,0,0,0.4)]">
+              <Flame size={11} strokeWidth={3} fill="currentColor" />
+              {STREAK_DAYS} day streak
+            </span>
+            <p className="text-warrior-text font-inter text-[12px]">
+              Every MCQ today counts.
+            </p>
+          </div>
+        </div>
+        <MiniScoreBadge score={PREDICTED_SCORE} max={210} onClick={() => setScoreOpen(true)} />
+      </motion.div>
+
+      {/* ── COUNTDOWN RIBBON ─────────────────────── */}
+      <CountdownRibbon target={MDCAT_DATE} />
+
+      {/* ── DAILY WISDOM ─────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="bg-dark-charcoal border-2 border-l-[5px] border-mdcat-yellow rounded-2xl px-4 py-3 flex items-start gap-3 shadow-[4px_4px_0px_rgba(255,198,0,0.12)]"
+      >
+        <div className="mt-0.5 flex-shrink-0 w-8 h-8 bg-mdcat-yellow/15 border-2 border-mdcat-yellow/30 rounded-xl flex items-center justify-center">
+          <BookOpen size={13} className="text-mdcat-yellow" />
+        </div>
+        <div>
+          <p className="text-[9px] font-poppins font-black uppercase tracking-[0.18em] text-mdcat-yellow mb-1">
+            {wisdom.type === "quran" ? "Word of Allah" : "Today's Quote"}
+          </p>
+          <p className="text-white font-inter text-[13px] leading-snug italic">
+            &ldquo;{wisdom.text}&rdquo;
+          </p>
+          <p className="text-warrior-text text-[10px] font-inter mt-1">— {wisdom.source}</p>
+        </div>
+      </motion.div>
+
+      {/* ── QUICK STATS ──────────────────────────── */}
+      <div>
+        <SectionHeader title="Your Stats" />
+
+        {/* Mobile — Accuracy + Today tap to expand */}
+        <div className="grid grid-cols-3 gap-2.5 lg:hidden">
+          <StatCard
+            icon={BarChart2}
+            label="Accuracy"
+            value={`${OVERALL_ACCURACY}%`}
+            sub="Tap for 7d"
+            accent={scoreColor(OVERALL_ACCURACY)}
+            onClick={() => setPerformanceOpen(true)}
+            hint
+          />
+          <StatCard
+            icon={Target}
+            label="Total MCQs"
+            value={TOTAL_MCQS.toLocaleString()}
+            sub="Lifetime"
+          />
+          <StatCard
+            icon={CheckCircle}
+            label="Today"
+            value={`${TODAY_MCQS} / ${DAILY_GOAL}`}
+            sub={`${todayPct}% · tap`}
+            accent={todayPct >= 100 ? "text-emerald-400" : "text-white"}
+            onClick={() => setActivityOpen(true)}
+            hint
+          />
+        </div>
+
+        {/* Desktop — static */}
+        <div className="hidden lg:grid grid-cols-3 gap-2.5">
+          <StatCard icon={BarChart2}   label="Accuracy"   value={`${OVERALL_ACCURACY}%`}      sub="Correct rate" accent={scoreColor(OVERALL_ACCURACY)} />
+          <StatCard icon={Target}      label="Total MCQs" value={TOTAL_MCQS.toLocaleString()} sub="Lifetime attempts" />
+          <StatCard icon={CheckCircle} label="Today"      value={`${TODAY_MCQS} / ${DAILY_GOAL}`} sub={`${todayPct}% of goal`} accent={todayPct >= 100 ? "text-emerald-400" : "text-white"} />
+        </div>
+      </div>
+
+      {/* ── SUBJECTS PREPARATION ─────────────────── */}
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="font-poppins font-black text-white text-[15px] uppercase tracking-[0.04em]">
+            Subjects Preparation
+          </h2>
+          <span className="text-[10px] font-inter font-bold uppercase tracking-[0.12em] text-mdcat-yellow">
+            Tap to explore
+          </span>
+        </div>
+        <p className="text-warrior-text font-inter text-[11px] mb-3">
+          Drill into each subject to see every chapter's accuracy.
+        </p>
+        <div className="bg-dark-charcoal border-2 border-warrior-border rounded-2xl p-4 shadow-[4px_4px_0px_rgba(255,198,0,0.1)]">
+          <div className="flex flex-wrap justify-center gap-y-4 gap-x-3 md:gap-x-4">
+            {SUBJECTS.map((s, i) => {
+              const stale = s.lastDays >= 3;
+              return (
+                <Link
+                  key={s.slug}
+                  href={`/dashboard/analytics/${s.slug}`}
+                  className="group block w-[30%] md:w-[17%]"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: i * 0.05 }}
+                    whileHover={{ y: -5, scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="relative flex flex-col items-center gap-1.5 py-1 cursor-pointer"
+                  >
+                    <div className="relative rounded-full transition-all duration-200 group-hover:drop-shadow-[0_0_14px_rgba(255,198,0,0.45)]">
+                      <CircularRing
+                        percent={s.accuracy}
+                        color={s.color}
+                        size={74}
+                        strokeWidth={6}
+                      />
+                      <motion.div
+                        animate={{ scale: [1, 1.12, 1] }}
+                        transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 }}
+                        className="lg:hidden absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-mdcat-yellow border-2 border-warrior-black flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]"
+                      >
+                        <ChevronRight size={10} className="text-warrior-black" strokeWidth={3.5} />
+                      </motion.div>
+                    </div>
+                    <p className="font-poppins font-black text-[11px] text-white text-center leading-tight group-hover:text-mdcat-yellow transition-colors">
+                      {s.name}
+                    </p>
+                    <div className="flex items-center gap-1">
+                      <span className="font-inter text-[9px] text-warrior-text">
+                        {s.mcqs} MCQs
+                      </span>
+                      {stale && (
+                        <span className="inline-flex items-center gap-0.5 text-[9px] font-inter font-bold text-amber-400">
+                          · {s.lastDays}d
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── LET'S TRAIN — 4 MODULES ──────────────── */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-poppins font-black text-white text-[15px] uppercase tracking-[0.04em]">
+            Let's Train, Warrior
+          </h2>
+          <div className="flex items-center gap-1.5 px-2 py-[3px] rounded-full bg-mdcat-yellow/10 border border-mdcat-yellow/30">
+            <motion.span
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1.5 h-1.5 rounded-full bg-mdcat-yellow"
+            />
+            <span className="text-[8px] font-poppins font-black text-mdcat-yellow uppercase tracking-[0.12em] leading-none">
+              Test Series Live
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+          {MODULES.map((m, i) => (
+            <ModuleCard key={m.href} {...m} index={i} />
+          ))}
+        </div>
+      </div>
+
+      {/* ── RECENT ACTIVITY — desktop only ──────── */}
+      <div className="hidden lg:block">
+        <SectionHeader title="Recent Activity" />
+        <div className="bg-dark-charcoal border border-warrior-border rounded-xl p-5">
+          <RecentActivityWidget heatmap={HEATMAP} streakDays={STREAK_DAYS} />
+        </div>
+      </div>
+
+      {/* ── PERFORMANCE TREND — desktop only ────── */}
+      <div className="hidden lg:block">
+        <SectionHeader title="Performance — Last 7 Sessions" />
+        <div className="bg-dark-charcoal border border-warrior-border rounded-xl p-5">
+          <div className="flex items-end gap-2 h-[100px]">
+            {TREND.map((t, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+                <span className={`text-[10px] font-inter font-bold ${scoreColor(t.acc)}`}>{t.acc}%</span>
+                <motion.div
+                  initial={{ height: 0 }}
+                  whileInView={{ height: `${(t.acc / trendMax) * 70}px` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
+                  className="w-full rounded-t-md"
+                  style={{
+                    background: t.acc >= 70 ? "#10B981" : t.acc >= 55 ? "#FFA500" : "#D9534F",
+                    opacity: i === TREND.length - 1 ? 1 : 0.65,
+                  }}
+                />
+                <span className="text-[10px] font-inter text-warrior-text">{t.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-warrior-border flex items-center gap-4">
+            {TREND[TREND.length - 1].acc > TREND[0].acc ? (
+              <div className="flex items-center gap-1.5 text-emerald-400">
+                <TrendingUp size={14} />
+                <span className="text-xs font-inter font-bold">
+                  +{TREND[TREND.length - 1].acc - TREND[0].acc}% this week
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-red-400">
+                <TrendingDown size={14} />
+                <span className="text-xs font-inter font-bold">
+                  {TREND[TREND.length - 1].acc - TREND[0].acc}% this week
+                </span>
+              </div>
+            )}
+            <span className="text-warrior-text text-[11px] font-inter">
+              Avg: {Math.round(TREND.reduce((s, t) => s + t.acc, 0) / TREND.length)}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── WEAK TOPICS ──────────────────────────── */}
+      <div>
+        <SectionHeader title="Focus Here — Weak Topics" action="Quiz Builder" href="/dashboard/quiz" />
+        <div className="bg-dark-charcoal border border-warrior-border rounded-xl divide-y divide-warrior-border">
+          {WEAK_TOPICS.map((t, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: i * 0.05 }}
+              className="flex items-center gap-4 px-4 py-3 group hover:bg-warrior-gray/20 transition-colors"
+            >
+              <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: t.color }} />
+              <div className="flex-1 min-w-0">
+                <p className="font-inter font-bold text-[13px] text-white truncate">{t.topic}</p>
+                <p className="text-warrior-text text-[11px] font-inter">
+                  {t.subject} · {t.chapter}
+                </p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="font-poppins font-black text-red-400 text-base">{t.accuracy}%</p>
+                <p className="text-warrior-text text-[10px] font-inter">correct</p>
+              </div>
+              <Link href="/dashboard/quiz">
+                <div className="w-7 h-7 bg-mdcat-yellow/10 border border-mdcat-yellow/20 rounded-md flex items-center justify-center text-mdcat-yellow hover:bg-mdcat-yellow/20 transition-colors cursor-pointer">
+                  <ChevronRight size={13} />
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-4" />
+
+      <AnimatePresence>
+        {scoreOpen && <ScorePredictorModal onClose={() => setScoreOpen(false)} />}
+        {performanceOpen && <PerformancePopup onClose={() => setPerformanceOpen(false)} />}
+        {activityOpen && <ActivityPopup onClose={() => setActivityOpen(false)} />}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+
+================================================================================
+FILE 2/6 — lib/analytics-data.ts
+================================================================================
+
+export type Chapter = {
+  name: string;
+  accuracy: number;
+  mcqs: number;
+};
+
+export type Subject = {
+  name: string;
+  short: string;
+  slug: string;
+  mcqs: number;
+  accuracy: number;
+  color: string;
+  lastDays: number;
+  chapters: Chapter[];
+};
+
+function makeChapters(names: string[], base: number, seed: number): Chapter[] {
+  return names.map((name, i) => {
+    const h = ((seed + i * 2654435761) >>> 0) % 1000;
+    const variance = (h % 60) - 30;
+    const accuracy = Math.max(22, Math.min(96, base + variance));
+    const mcqs = 8 + (h % 55);
+    return { name, accuracy, mcqs };
+  });
+}
+
+const BIOLOGY = [
+  "Biological Molecules", "Enzymes", "Bioenergetics", "Cell Structure",
+  "Cell Cycle", "Diversity of Life", "Kingdom Monera", "Kingdom Protista",
+  "Digestion", "Circulation", "Respiration", "Excretion",
+  "Coordination & Control", "Reproduction", "Growth & Development",
+  "Chromosomes & DNA", "Evolution", "Biotechnology", "Man & Environment",
+  "Inheritance",
+];
+
+const CHEMISTRY = [
+  "Atomic Structure", "Chemical Bonding", "Gases", "Liquids & Solids",
+  "Chemical Equilibrium", "Reaction Kinetics", "Thermochemistry",
+  "Electrochemistry", "s-Block Elements", "p-Block Elements",
+  "d-Block Elements", "Fundamental Organic", "Hydrocarbons",
+  "Alkyl Halides", "Alcohols & Phenols", "Aldehydes & Ketones",
+  "Carboxylic Acids", "Biomolecules", "Polymers", "Industrial Chemistry",
+];
+
+const PHYSICS = [
+  "Measurement", "Vectors & Equilibrium", "Motion & Force", "Work & Energy",
+  "Circular Motion", "Oscillations", "Waves", "Thermodynamics",
+  "Electrostatics", "Current Electricity", "Electromagnetism",
+  "EM Induction", "AC Circuits", "Physics of Solids", "Electronics",
+  "Modern Physics", "Atomic Spectra", "Nuclear Physics",
+  "Fluid Dynamics", "Optics",
+];
+
+const ENGLISH = [
+  "Tenses", "Active & Passive", "Direct & Indirect", "Sentence Structure",
+  "Parts of Speech", "Subject-Verb Agreement", "Prepositions", "Articles",
+  "Modals", "Conditionals", "Vocabulary", "Synonyms",
+  "Antonyms", "Analogies", "Sentence Correction", "Reading Comprehension",
+  "Punctuation", "Modifiers", "Idioms", "Phrasal Verbs",
+];
+
+const LOGICAL_REASONING = [
+  "Critical Thinking", "Pattern Recognition", "Syllogisms", "Analogies",
+  "Number Series", "Logical Deduction", "Cause & Effect",
+  "Statement Analysis",
+];
+
+export const SUBJECTS: Subject[] = [
+  {
+    name: "Biology", short: "Bio", slug: "biology", mcqs: 450,
+    accuracy: 72, color: "#10B981", lastDays: 0,
+    chapters: makeChapters(BIOLOGY, 72, 101),
+  },
+  {
+    name: "Chemistry", short: "Chem", slug: "chemistry", mcqs: 320,
+    accuracy: 58, color: "#38BDF8", lastDays: 4,
+    chapters: makeChapters(CHEMISTRY, 58, 207),
+  },
+  {
+    name: "Physics", short: "Phys", slug: "physics", mcqs: 280,
+    accuracy: 61, color: "#A78BFA", lastDays: 1,
+    chapters: makeChapters(PHYSICS, 61, 313),
+  },
+  {
+    name: "English", short: "Eng", slug: "english", mcqs: 120,
+    accuracy: 84, color: "#2DD4BF", lastDays: 2,
+    chapters: makeChapters(ENGLISH, 84, 419),
+  },
+  {
+    name: "Logical Reasoning", short: "LR", slug: "logical-reasoning",
+    mcqs: 77, accuracy: 47, color: "#FB923C", lastDays: 6,
+    chapters: makeChapters(LOGICAL_REASONING, 47, 523),
+  },
+];
+
+export const MDCAT_WEIGHTS = [68, 54, 54, 18, 6];
+
+
+================================================================================
+FILE 3/6 — components/dashboard/CircularRing.tsx
+================================================================================
+
+"use client";
+
+import { motion } from "framer-motion";
+
+type Props = {
+  percent: number;
+  color: string;
+  size?: number;
+  strokeWidth?: number;
+  label?: string;
+  subLabel?: string;
+  delay?: number;
+};
+
+export function CircularRing({
+  percent,
+  color,
+  size = 104,
+  strokeWidth = 9,
+  label,
+  subLabel,
+  delay = 0,
+}: Props) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (percent / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center gap-2 select-none">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="-rotate-90">
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="rgb(var(--warrior-border-rgb))"
+            strokeWidth={strokeWidth}
+            fill="none"
+          />
+          <motion.circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke={color}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            fill="none"
+            initial={{ strokeDashoffset: circumference }}
+            whileInView={{ strokeDashoffset: offset }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: "easeOut", delay }}
+            style={{ strokeDasharray: circumference }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            className="font-poppins font-black"
+            style={{
+              color,
+              fontSize: size < 90 ? "13px" : size < 110 ? "15px" : "18px",
+            }}
+          >
+            {percent}%
+          </span>
+        </div>
+      </div>
+      {label && (
+        <p className="font-poppins font-black text-[12px] text-white text-center leading-tight px-1">
+          {label}
+        </p>
+      )}
+      {subLabel && (
+        <p className="font-inter text-[10px] text-warrior-text text-center">
+          {subLabel}
+        </p>
+      )}
+    </div>
+  );
+}
+
+
+================================================================================
+FILE 4/6 — app/dashboard/layout.tsx
+================================================================================
+NOTE: imports ThemeToggle — either include your own or replace with a stub.
+
+"use client";
+
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  LayoutDashboard, Zap, Layers, Archive, BarChart2,
+  Settings, PanelLeftClose, PanelLeftOpen,
+  Bell, Menu, X,
+} from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+
+const NAV_ITEMS = [
+  { label: "My Camp",      href: "/dashboard",              icon: LayoutDashboard },
+  { label: "Quiz Builder", href: "/dashboard/quiz",         icon: Zap },
+  { label: "Test Series",  href: "/dashboard/test-series",  icon: Layers },
+  { label: "My Copy",      href: "/dashboard/my-copy",      icon: Archive },
+  { label: "Analytics",    href: "/dashboard/analytics",    icon: BarChart2 },
+];
+
+const PAGE_TITLES: Record<string, string> = {
+  "/dashboard":               "My Camp",
+  "/dashboard/quiz":          "Quiz Builder",
+  "/dashboard/test-series":   "Test Series",
+  "/dashboard/my-copy":       "My Copy",
+  "/dashboard/analytics":     "Analytics",
+  "/dashboard/simulation":    "MDCAT Simulation",
+  "/dashboard/settings":      "Settings",
+};
+
+function NavItem({
+  item,
+  active,
+  collapsed,
+  onClick,
+}: {
+  item: typeof NAV_ITEMS[0];
+  active: boolean;
+  collapsed: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <Link href={item.href} onClick={onClick}>
+      <div
+        className={`relative flex items-center rounded-lg transition-all duration-200 cursor-pointer group ${
+          collapsed ? "justify-center h-10 w-10 mx-auto" : "gap-3 px-3 py-2.5"
+        } ${
+          active
+            ? "bg-mdcat-yellow/10 text-mdcat-yellow"
+            : "text-warrior-text hover:bg-warrior-gray/40 hover:text-white"
+        }`}
+      >
+        {active && (
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-mdcat-yellow rounded-full" />
+        )}
+        <item.icon size={17} className="flex-shrink-0" />
+        {!collapsed && (
+          <span className="font-inter font-semibold text-[13px] truncate">{item.label}</span>
+        )}
+        {collapsed && (
+          <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-dark-charcoal border border-warrior-border rounded-lg text-white text-xs font-inter font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none shadow-xl z-[60]">
+            {item.label}
+          </div>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+function ShieldMark({ size = 28 }: { size?: number }) {
+  return (
+    <div
+      className="bg-mdcat-yellow flex items-center justify-center flex-shrink-0"
+      style={{
+        width: size,
+        height: size * 1.14,
+        clipPath: "polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%)",
+      }}
+    >
+      <span
+        className="font-poppins font-black text-warrior-black leading-none"
+        style={{ fontSize: size * 0.36 }}
+      >
+        M
+      </span>
+    </div>
+  );
+}
+
+function AvatarChip({ size = 32 }: { size?: number }) {
+  return (
+    <div
+      className="rounded-full bg-mdcat-yellow/15 border border-mdcat-yellow/30 flex items-center justify-center flex-shrink-0"
+      style={{ width: size, height: size }}
+    >
+      <span className="font-poppins font-black text-mdcat-yellow" style={{ fontSize: size * 0.34 }}>
+        HK
+      </span>
+    </div>
+  );
+}
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const pageTitle = PAGE_TITLES[pathname] ?? "Dashboard";
+  const isActive = (href: string) =>
+    href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+
+  return (
+    <div className="flex h-screen bg-warrior-black overflow-hidden">
+
+      {/* DESKTOP SIDEBAR */}
+      <motion.aside
+        initial={false}
+        animate={{ width: collapsed ? 64 : 240 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="hidden lg:flex flex-col bg-warrior-black border-r border-warrior-border overflow-hidden relative z-20 flex-shrink-0"
+      >
+        <div
+          className={`flex items-center h-[60px] border-b border-warrior-border flex-shrink-0 ${
+            collapsed ? "justify-center px-0" : "gap-3 px-4"
+          }`}
+        >
+          <ShieldMark size={28} />
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap"
+              >
+                <span className="font-poppins font-black text-[15px] tracking-tight">
+                  <span className="text-mdcat-yellow">MDCAT</span>
+                  <span className="text-white">EMY</span>
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <nav className="flex-1 py-3 overflow-y-auto overflow-x-hidden">
+          <div className={`space-y-0.5 ${collapsed ? "px-1.5" : "px-2"}`}>
+            {NAV_ITEMS.map((item) => (
+              <NavItem
+                key={item.href}
+                item={item}
+                active={isActive(item.href)}
+                collapsed={collapsed}
+              />
+            ))}
+          </div>
+        </nav>
+
+        <div className={`border-t border-warrior-border py-2 space-y-0.5 ${collapsed ? "px-1.5" : "px-2"}`}>
+          <NavItem
+            item={{ label: "Settings", href: "/dashboard/settings", icon: Settings }}
+            active={pathname === "/dashboard/settings"}
+            collapsed={collapsed}
+          />
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className={`w-full flex items-center rounded-lg transition-all duration-200 text-warrior-text hover:bg-warrior-gray/40 hover:text-white ${
+              collapsed ? "justify-center h-10" : "gap-3 px-3 py-2.5"
+            }`}
+          >
+            {collapsed ? (
+              <PanelLeftOpen size={17} />
+            ) : (
+              <>
+                <PanelLeftClose size={17} />
+                <span className="font-inter font-semibold text-[13px]">Collapse</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        <div
+          className={`border-t border-warrior-border py-3 flex items-center ${
+            collapsed ? "justify-center px-0" : "gap-3 px-3"
+          }`}
+        >
+          <AvatarChip size={32} />
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden whitespace-nowrap"
+              >
+                <p className="font-inter font-bold text-[12px] text-white">Hayan Khan</p>
+                <p className="font-inter text-[10px] text-warrior-text uppercase tracking-[0.1em]">
+                  Warrior
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.aside>
+
+      {/* MOBILE SIDEBAR OVERLAY */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/65 z-40 lg:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="fixed left-0 top-0 bottom-0 w-[260px] bg-warrior-black border-r border-warrior-border z-50 lg:hidden flex flex-col"
+            >
+              <div className="flex items-center gap-3 h-[60px] px-4 border-b border-warrior-border">
+                <ShieldMark size={28} />
+                <span className="font-poppins font-black text-[15px] tracking-tight">
+                  <span className="text-mdcat-yellow">MDCAT</span>
+                  <span className="text-white">EMY</span>
+                </span>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="ml-auto text-warrior-text hover:text-white transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <nav className="flex-1 py-3 overflow-y-auto">
+                <div className="space-y-0.5 px-2">
+                  {NAV_ITEMS.map((item) => (
+                    <NavItem
+                      key={item.href}
+                      item={item}
+                      active={isActive(item.href)}
+                      collapsed={false}
+                      onClick={() => setMobileOpen(false)}
+                    />
+                  ))}
+                </div>
+              </nav>
+
+              <div className="border-t border-warrior-border px-2 py-2">
+                <NavItem
+                  item={{ label: "Settings", href: "/dashboard/settings", icon: Settings }}
+                  active={pathname === "/dashboard/settings"}
+                  collapsed={false}
+                  onClick={() => setMobileOpen(false)}
+                />
+              </div>
+
+              <div className="border-t border-warrior-border px-3 py-3 flex items-center gap-3">
+                <AvatarChip size={34} />
+                <div>
+                  <p className="font-inter font-bold text-[12px] text-white">Hayan Khan</p>
+                  <p className="font-inter text-[10px] text-warrior-text uppercase tracking-[0.1em]">
+                    Warrior
+                  </p>
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* MAIN AREA */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header className="h-[60px] bg-dark-charcoal border-b border-warrior-border flex items-center justify-between px-4 lg:px-6 flex-shrink-0 z-10">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="lg:hidden text-warrior-text hover:text-white transition-colors p-1"
+            >
+              <Menu size={20} />
+            </button>
+            <div>
+              <h1 className="font-poppins font-black text-white text-[15px] leading-tight">
+                {pageTitle}
+              </h1>
+              <p className="text-warrior-text text-[10px] font-inter hidden lg:block leading-tight mt-0.5">
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 lg:gap-2">
+            <ThemeToggle size={36} />
+            <button className="relative w-9 h-9 flex items-center justify-center text-warrior-text hover:text-white hover:bg-warrior-gray/50 rounded-lg transition-all duration-200">
+              <Bell size={17} />
+              <span className="absolute top-[7px] right-[7px] w-1.5 h-1.5 bg-mdcat-yellow rounded-full" />
+            </button>
+            <AvatarChip size={32} />
+          </div>
+        </header>
+
+        <main data-dashboard-main className="flex-1 overflow-hidden pb-[58px] lg:pb-0">
+          <div className="h-full overflow-y-auto">
+            {children}
+          </div>
+        </main>
+
+        {/* MOBILE BOTTOM TAB BAR */}
+        <div data-mobile-tabbar className="lg:hidden fixed bottom-0 left-0 right-0 bg-dark-charcoal border-t border-warrior-border z-30">
+          <div className="flex items-stretch h-[58px]">
+            {NAV_ITEMS.map((tab) => {
+              const active = isActive(tab.href);
+              const shortLabel =
+                tab.label === "My Camp"      ? "Home" :
+                tab.label === "Quiz Builder" ? "Quiz" :
+                tab.label === "Test Series"  ? "Tests" :
+                tab.label === "My Copy"      ? "Copy" :
+                tab.label;
+
+              return (
+                <Link
+                  key={tab.href}
+                  href={tab.href}
+                  className="flex-1 flex flex-col items-center justify-center gap-0.5 relative pt-1"
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-mdcat-yellow rounded-full"
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                  <tab.icon
+                    size={19}
+                    className={`transition-colors duration-200 ${active ? "text-mdcat-yellow" : "text-warrior-text"}`}
+                  />
+                  <span
+                    className={`text-[9px] font-inter font-bold uppercase tracking-[0.05em] transition-colors duration-200 ${
+                      active ? "text-mdcat-yellow" : "text-warrior-text"
+                    }`}
+                  >
+                    {shortLabel}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+================================================================================
+FILE 5/6 — app/globals.css
+================================================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   THEME TOKENS — CSS variables flip when html gets .light class
+───────────────────────────────────────────────────────────── */
+:root,
+html.dark {
+  --warrior-black-rgb:  24 26 24;
+  --dark-charcoal-rgb:  34 36 34;
+  --warrior-gray-rgb:   42 44 42;
+  --warrior-border-rgb: 46 48 46;
+  --warrior-text-rgb:   168 172 168;
+  --text-base-rgb:      255 255 255;
+  --shadow-color:       0 0 0;
+  --scrollbar-track:    #181A18;
+
+  --warrior-black: #181A18;
+  --dark-charcoal: #222422;
+  --mdcat-yellow:  #FFC600;
+}
+
+html.light {
+  --warrior-black-rgb:  250 250 247;
+  --dark-charcoal-rgb:  255 255 255;
+  --warrior-gray-rgb:   241 240 235;
+  --warrior-border-rgb: 229 228 224;
+  --warrior-text-rgb:   107 107 104;
+  --text-base-rgb:      24 26 24;
+  --shadow-color:       30 30 28;
+  --scrollbar-track:    #F1F0EB;
+
+  --warrior-black: #FAFAF7;
+  --dark-charcoal: #FFFFFF;
+  --mdcat-yellow:  #FFC600;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--warrior-black-rgb));
+  color: rgb(var(--text-base-rgb));
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.light .text-white,
+html.light [class*="text-white/"] {
+  color: rgb(var(--text-base-rgb));
+}
+
+html.light .border-white,
+html.light [class*="border-white/"] {
+  border-color: rgb(var(--warrior-border-rgb));
+}
+
+html.light .bg-white {
+  background-color: rgb(var(--dark-charcoal-rgb));
+}
+
+html.light [class*="bg-black/"] {
+  background-color: rgb(40 40 40 / 0.45);
+}
+
+html.light .btn-ghost {
+  border-color: rgb(var(--warrior-border-rgb));
+  color: rgb(var(--text-base-rgb));
+}
+html.light .btn-ghost:hover {
+  border-color: #FFC600;
+  color: #C49600;
+}
+
+body.quiz-immersive [data-mobile-tabbar] {
+  display: none !important;
+}
+body.quiz-immersive [data-dashboard-main] {
+  padding-bottom: 0 !important;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: #FFC600;
+  border-radius: 3px;
+}
+
+::selection {
+  background: rgba(255, 198, 0, 0.3);
+  color: #ffffff;
+}
+
+.marquee-track:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+.btn-primary {
+  @apply bg-mdcat-yellow text-warrior-black font-inter font-black px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 relative overflow-hidden;
+  box-shadow: 0 0 0 0 rgba(255, 198, 0, 0);
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-25deg);
+}
+.btn-primary:hover {
+  @apply scale-105;
+  box-shadow: 0 0 32px 8px rgba(255, 198, 0, 0.4);
+}
+.btn-primary:hover::after {
+  animation: btn-shimmer 0.55s ease forwards;
+}
+.btn-primary:active {
+  @apply scale-95;
+}
+
+@keyframes btn-shimmer {
+  0%   { left: -120%; }
+  100% { left: 160%; }
+}
+
+.btn-ghost {
+  @apply border border-white/30 text-white font-inter font-bold px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 bg-transparent;
+}
+.btn-ghost:hover {
+  @apply border-mdcat-yellow text-mdcat-yellow;
+}
+.btn-ghost:active {
+  @apply scale-95;
+}
+
+.section-cut {
+  clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
+}
+.section-cut-reverse {
+  clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+}
+
+.tribal-overlay {
+  position: relative;
+}
+.tribal-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/tribal-bg.svg');
+  background-size: 300px 300px;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.text-gradient-yellow {
+  background: linear-gradient(135deg, #FFC600 0%, #FFD740 50%, #FFC600 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.callout-yellow {
+  border-left: 4px solid #FFC600;
+  padding-left: 1.5rem;
+}
+
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 198, 0, 0.08);
+}
+
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+================================================================================
+FILE 6/6 — tailwind.config.ts
+================================================================================
+
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        "warrior-black":  "rgb(var(--warrior-black-rgb)  / <alpha-value>)",
+        "dark-charcoal":  "rgb(var(--dark-charcoal-rgb)  / <alpha-value>)",
+        "warrior-gray":   "rgb(var(--warrior-gray-rgb)   / <alpha-value>)",
+        "warrior-text":   "rgb(var(--warrior-text-rgb)   / <alpha-value>)",
+        "warrior-border": "rgb(var(--warrior-border-rgb) / <alpha-value>)",
+        "mdcat-yellow":      "#FFC600",
+        "mdcat-yellow-dark": "#E6B200",
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+      },
+      fontSize: {
+        "hero-xl": ["clamp(2.5rem, 6vw, 5rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+        "section-xl": ["clamp(1.8rem, 4vw, 3rem)", { lineHeight: "1.1" }],
+      },
+      animation: {
+        marquee: "marquee 35s linear infinite",
+        "marquee-reverse": "marquee-reverse 35s linear infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "fade-up": "fade-up 0.5s ease-out forwards",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "marquee-reverse": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(255, 198, 0, 0)" },
+          "50%": { boxShadow: "0 0 24px 8px rgba(255, 198, 0, 0.25)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      backgroundImage: {
+        "tribal-pattern": "url('/images/tribal-bg.svg')",
+        "gradient-warrior": "linear-gradient(180deg, #181A18 0%, #222422 100%)",
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
+
+
+================================================================================
+END OF BUNDLE
+================================================================================

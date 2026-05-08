@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biology · Analytics · MDCATEMY</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #181A18;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    * { box-sizing: border-box; }
+    .font-poppins { font-family: "Poppins", sans-serif; }
+    .font-inter   { font-family: "Inter",   sans-serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #181A18; }
+    ::-webkit-scrollbar-thumb { background: #FFC600; border-radius: 3px; }
+    ::selection { background: rgba(255,198,0,0.3); color: #fff; }
+
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.12); }
+    }
+    .badge-pulse { animation: pulse-soft 1.4s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-[#181A18]">
+
+  <div class="flex h-screen bg-[#181A18] overflow-hidden">
+
+    <!-- ════════════════════════════════════════════════════════════
+         DESKTOP SIDEBAR — Analytics ACTIVE
+    ════════════════════════════════════════════════════════════ -->
+    <aside class="hidden lg:flex flex-col bg-[#181A18] border-r border-[#2E302E] overflow-hidden relative z-20 flex-shrink-0" style="width: 240px;">
+
+      <div class="flex items-center gap-3 h-[60px] px-4 border-b border-[#2E302E] flex-shrink-0">
+        <div class="bg-[#FFC600] flex items-center justify-center flex-shrink-0"
+             style="width:28px; height:32px; clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);">
+          <span class="font-poppins font-black text-[#181A18] leading-none" style="font-size:10px;">M</span>
+        </div>
+        <span class="font-poppins font-black text-[15px] tracking-tight whitespace-nowrap">
+          <span class="text-[#FFC600]">MDCAT</span><span class="text-white">EMY</span>
+        </span>
+      </div>
+
+      <nav class="flex-1 py-3 overflow-y-auto overflow-x-hidden">
+        <div class="space-y-0.5 px-2">
+
+          <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-[#A8ACA8] hover:bg-[#2A2C2A]/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Camp</span>
+          </a>
+
+          <a href="quiz.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-[#A8ACA8] hover:bg-[#2A2C2A]/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Quiz Builder</span>
+          </a>
+
+          <a href="test-series.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-[#A8ACA8] hover:bg-[#2A2C2A]/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.91a1 1 0 0 0 0-1.83Z"/>
+              <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+              <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Test Series</span>
+          </a>
+
+          <a href="my-copy.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-[#A8ACA8] hover:bg-[#2A2C2A]/40 hover:text-white transition-all duration-200">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <rect x="2" y="3" width="20" height="5" rx="1"/>
+              <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+              <path d="M10 12h4"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">My Copy</span>
+          </a>
+
+          <!-- Analytics — ACTIVE -->
+          <a href="analytics.html" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 bg-[#FFC600]/10 text-[#FFC600] transition-all duration-200">
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#FFC600] rounded-full"></div>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span class="font-inter font-semibold text-[13px] truncate">Analytics</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="border-t border-[#2E302E] py-2 space-y-0.5 px-2">
+        <a href="#" class="relative flex items-center rounded-lg gap-3 px-3 py-2.5 text-[#A8ACA8] hover:bg-[#2A2C2A]/40 hover:text-white transition-all duration-200">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="font-inter font-semibold text-[13px]">Settings</span>
+        </a>
+      </div>
+
+      <div class="border-t border-[#2E302E] py-3 flex items-center gap-3 px-3">
+        <div class="rounded-full bg-[#FFC600]/15 border border-[#FFC600]/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+          <span class="font-poppins font-black text-[#FFC600]" style="font-size:11px;">HK</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-inter font-bold text-[12px] text-white leading-tight">Hayan Khan</p>
+          <p class="font-inter text-[10px] text-[#A8ACA8] uppercase tracking-[0.1em]">Warrior</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════
+         MAIN AREA
+    ════════════════════════════════════════════════════════════ -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+      <!-- Top bar -->
+      <header class="h-[60px] bg-[#222422] border-b border-[#2E302E] flex items-center justify-between px-4 lg:px-6 flex-shrink-0 z-10">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden text-[#A8ACA8] hover:text-white transition-colors p-1">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6"  x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <h1 class="font-poppins font-black text-white text-[15px] leading-tight">Analytics · Biology</h1>
+        </div>
+
+        <div class="flex items-center gap-1.5 lg:gap-2">
+          <div class="rounded-full bg-[#FFC600]/15 border border-[#FFC600]/30 flex items-center justify-center flex-shrink-0" style="width:32px; height:32px;">
+            <span class="font-poppins font-black text-[#FFC600]" style="font-size:11px;">HK</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── PAGE BODY ── -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="px-4 lg:px-8 py-6 space-y-6 max-w-5xl mx-auto">
+
+          <!-- ── BACK NAV ─────────────────────── -->
+          <a href="analytics.html"
+             class="group inline-flex items-center gap-2 text-[#A8ACA8] hover:text-[#FFC600] transition-colors font-poppins font-black text-[12px] uppercase tracking-[0.1em]">
+            <div class="w-7 h-7 bg-[#222422] border-2 border-[#2E302E] group-hover:border-[#FFC600] rounded-lg flex items-center justify-center transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </div>
+            Back to Analytics
+          </a>
+
+          <!-- ── SUBJECT HEADER ───────────────── -->
+          <div class="bg-[#222422] border-2 border-[#2E302E] rounded-2xl p-5 shadow-[4px_4px_0px_rgba(255,198,0,0.12)] flex flex-col sm:flex-row items-center gap-6">
+            <!-- Big ring — Biology 72%, size 120, strokeWidth 11, radius 54.5, circumference 342.40, offset 95.87 -->
+            <div class="shrink-0">
+              <div class="relative" style="width: 120px; height: 120px;">
+                <svg width="120" height="120" class="-rotate-90">
+                  <circle cx="60" cy="60" r="54.5" stroke="#2E302E" stroke-width="11" fill="none"/>
+                  <circle cx="60" cy="60" r="54.5" stroke="#10B981" stroke-width="11" stroke-linecap="round" fill="none"
+                          stroke-dasharray="342.40" stroke-dashoffset="95.87"/>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="font-poppins font-black" style="color: #10B981; font-size: 18px;">72%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 text-center sm:text-left">
+              <p class="text-[10px] font-poppins font-black uppercase tracking-[0.18em] text-[#A8ACA8] mb-1">
+                Subject Overview
+              </p>
+              <h1 class="font-poppins font-black text-white text-3xl mb-3">Biology</h1>
+              <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                <span class="inline-flex items-center gap-1.5 bg-[#181A18] border-2 border-[#2E302E] rounded-xl px-3 py-1.5 text-[11px] font-poppins font-black text-white">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                  </svg>
+                  20 chapters
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-[#181A18] border-2 border-[#2E302E] rounded-xl px-3 py-1.5 text-[11px] font-poppins font-black text-white">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                  </svg>
+                  450 MCQs done
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-[#181A18] border-2 border-[#2E302E] rounded-xl px-3 py-1.5 text-[11px] font-poppins font-black" style="color: #10B981;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+                  </svg>
+                  Avg 66%
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── HIGHLIGHTS ───────────────────── -->
+          <div class="grid grid-cols-2 gap-3">
+
+            <!-- Strongest — Kingdom Monera 96% -->
+            <div class="bg-[#222422] border-2 border-[#2E302E] rounded-2xl p-4 shadow-[3px_3px_0px_rgba(255,198,0,0.08)] flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl border-2 flex items-center justify-center shrink-0"
+                   style="background-color: #10B98122; border-color: #10B98155;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[9px] font-poppins font-black uppercase tracking-[0.15em] text-[#A8ACA8] mb-0.5">Strongest</p>
+                <p class="font-poppins font-black text-white text-[13px] truncate">Kingdom Monera</p>
+                <p class="font-poppins font-black text-[12px]" style="color: #10B981;">96%</p>
+              </div>
+            </div>
+
+            <!-- Needs Work — Man & Environment 45% -->
+            <div class="bg-[#222422] border-2 border-[#2E302E] rounded-2xl p-4 shadow-[3px_3px_0px_rgba(255,198,0,0.08)] flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl border-2 flex items-center justify-center shrink-0"
+                   style="background-color: #EF444422; border-color: #EF444455;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[9px] font-poppins font-black uppercase tracking-[0.15em] text-[#A8ACA8] mb-0.5">Needs Work</p>
+                <p class="font-poppins font-black text-white text-[13px] truncate">Man &amp; Environment</p>
+                <p class="font-poppins font-black text-[12px]" style="color: #EF4444;">45%</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ── CHAPTERS GRID ────────────────── -->
+          <div>
+            <h2 class="font-poppins font-black text-white text-[14px] uppercase tracking-[0.08em] mb-1">Chapter Accuracy</h2>
+            <p class="text-[#A8ACA8] font-inter text-[12px] mb-4">
+              20 chapters · colored ring shows your accuracy · tap to drill into topics
+            </p>
+
+            <div class="bg-[#222422] border-2 border-[#2E302E] rounded-2xl p-5 shadow-[4px_4px_0px_rgba(255,198,0,0.1)]">
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+
+                <!-- Chapter rings — size 88, strokeWidth 7, radius 40.5, circumference 254.47.
+                     Each ring has a small yellow chevron badge bottom-right indicating drill-in. -->
+
+                <!-- 1. Biological Molecules 83% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="43.26"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">83%</span>
+                      </div>
+                      <!-- Drill-in badge -->
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Biological Molecules</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">54 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 2. Enzymes 64% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="91.61"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">64%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Enzymes</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">45 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 3. Bioenergetics 69% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="78.89"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">69%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Bioenergetics</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">60 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 4. Cell Structure 70% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="76.34"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">70%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Cell Structure</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">41 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 5. Cell Cycle 55% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="114.51"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">55%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Cell Cycle</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">11 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 6. Diversity of Life 60% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="101.79"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">60%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Diversity of Life</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">26 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 7. Kingdom Monera 96% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="10.18"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">96%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Kingdom Monera</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">17 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 8. Kingdom Protista 46% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="137.41"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">46%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Kingdom Protista</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">32 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 9. Digestion 47% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="134.87"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">47%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Digestion</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">13 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 10. Circulation 92% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="20.36"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">92%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Circulation</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">38 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 11. Respiration 77% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="58.53"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">77%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Respiration</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">8 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 12. Excretion 78% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="55.98"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">78%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Excretion</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">44 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 13. Coordination & Control 83% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="43.26"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">83%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Coordination &amp; Control</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">59 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 14. Reproduction 68% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="81.43"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">68%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Reproduction</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">29 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 15. Growth & Development 69% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="78.89"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">69%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Growth &amp; Development</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">10 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 16. Chromosomes & DNA 54% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="117.06"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">54%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Chromosomes &amp; DNA</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">35 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 17. Evolution 55% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="114.51"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">55%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Evolution</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">16 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 18. Biotechnology 60% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="101.79"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">60%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Biotechnology</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">31 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 19. Man & Environment 45% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="139.96"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">45%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Man &amp; Environment</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">56 MCQs</p>
+                  </div>
+                </a>
+
+                <!-- 20. Inheritance 46% -->
+                <a href="#" class="group rounded-xl p-2 hover:bg-[#2A2C2A]/30 transition-all hover:scale-[1.05]">
+                  <div class="flex flex-col items-center gap-2 select-none">
+                    <div class="relative" style="width: 88px; height: 88px;">
+                      <svg width="88" height="88" class="-rotate-90">
+                        <circle cx="44" cy="44" r="40.5" stroke="#2E302E" stroke-width="7" fill="none"/>
+                        <circle cx="44" cy="44" r="40.5" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none"
+                                stroke-dasharray="254.47" stroke-dashoffset="137.41"/>
+                      </svg>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="font-poppins font-black" style="color: #10B981; font-size: 13px;">46%</span>
+                      </div>
+                      <div class="badge-pulse absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#FFC600] border-2 border-[#181A18] flex items-center justify-center shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.5)]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#181A18" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="font-poppins font-black text-[12px] text-white text-center leading-tight px-1 group-hover:text-[#FFC600] transition-colors">Inheritance</p>
+                    <p class="font-inter text-[10px] text-[#A8ACA8] text-center">37 MCQs</p>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom back link -->
+          <div class="flex justify-center pt-2">
+            <a href="analytics.html"
+               class="inline-flex items-center gap-2 bg-[#222422] border-2 border-[#2E302E] hover:border-[#FFC600] rounded-2xl px-5 py-3 shadow-[3px_3px_0px_rgba(255,198,0,0.1)] font-poppins font-black text-[12px] uppercase tracking-[0.1em] text-white hover:text-[#FFC600] transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+              </svg>
+              Back to Analytics
+            </a>
+          </div>
+
+          <div class="h-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
